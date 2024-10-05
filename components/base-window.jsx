@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Minus, Square } from 'lucide-react';
 
 export function BaseWindow({ title, children, onClose, onMinimize, onMaximize, isMaximized, zIndex, initialPosition = { x: 100, y: 100 }, initialSize = { width: 600, height: 400 } }) {
@@ -20,13 +20,13 @@ export function BaseWindow({ title, children, onClose, onMinimize, onMaximize, i
     }
   };
 
-  const stopDragging = () => {
+  const stopDragging = useCallback(() => {
     setIsDragging(false);
     setIsResizing(false);
     setResizeDirection('');
-  };
+  }, []); // No dependencies needed
 
-  const drag = (e) => {
+  const drag = useCallback((e) => {
     if (isDragging) {
       setPosition({
         x: e.clientX - dragOffset.x,
@@ -57,7 +57,7 @@ export function BaseWindow({ title, children, onClose, onMinimize, onMaximize, i
       setSize(newSize);
       setPosition(newPosition);
     }
-  };
+  }, [isDragging, isResizing, dragOffset, size, position, resizeDirection]);
 
   const startResizing = (direction) => {
     if (!isMaximized) {
@@ -73,7 +73,7 @@ export function BaseWindow({ title, children, onClose, onMinimize, onMaximize, i
       document.removeEventListener('mousemove', drag);
       document.removeEventListener('mouseup', stopDragging);
     };
-  }, [isDragging, isResizing, resizeDirection]);
+  }, [drag, stopDragging]); // Updated dependencies
 
   const windowStyle = isMaximized
     ? { left: 0, top: 0, width: '100%', height: 'calc(100% - 40px)', zIndex }

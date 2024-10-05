@@ -17,6 +17,7 @@ export function ResumeWindow({ onClose, onMinimize, onMaximize, isMaximized, zIn
           <h3 className="text-lg font-bold">Education</h3>
           <p><strong>Bachelor of Science in Computer Science</strong></p>
           <p>University Name, Graduation Year</p>
+          {/* <p>It&apos;s an example text.</p> // Ensure all single quotes are escaped */}
         </section>
         <section>
           <h3 className="text-lg font-bold">Work Experience</h3>
@@ -35,7 +36,7 @@ export function ResumeWindow({ onClose, onMinimize, onMaximize, isMaximized, zIn
             <ul className="list-disc pl-6">
               <li>Assisted in the development of responsive web designs using HTML, CSS, and JavaScript</li>
               <li>Collaborated with the design team to implement user interface improvements</li>
-              <li>Participated in code reviews and contributed to the company's internal component library</li>
+              <li>Participated in code reviews and contributed to the company&apos;s internal component library</li>
             </ul>
           </div>
         </section>

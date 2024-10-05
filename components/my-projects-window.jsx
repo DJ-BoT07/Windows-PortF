@@ -19,7 +19,7 @@ export function MyProjectsWindow({ onClose, onMinimize, onMaximize, isMaximized,
 
   useEffect(() => {
     setSelectedProject(history[historyIndex]);
-  }, [historyIndex]);
+  }, [historyIndex, history]); // Ensure 'history' is included in the dependency array
 
   const navigateTo = (project) => {
     const newHistory = history.slice(0, historyIndex + 1);

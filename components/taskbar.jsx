@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from "@/components/ui/button"
 import { Clock } from "lucide-react"
+import Image from 'next/image'; // Add this import
 
 export function Taskbar({ toggleStartMenu, windows, focusWindow }) {
   return (
@@ -52,8 +53,8 @@ function TaskbarButton({ name, icon, isActive, onClick }) {
 function SystemTray() {
   return (
     <div className="bg-[#0c60e8] text-white px-2 py-1 flex items-center space-x-2">
-      <img src="/volume-icon.png" alt="Volume" className="w-4 h-4" />
-      <img src="/network-icon.png" alt="Network" className="w-4 h-4" />
+      <Image src="/volume-icon.png" alt="Volume" width={50} height={50} />
+      <Image src="/network-icon.png" alt="Network" width={50} height={50} />
       <Clock className="w-4 h-4" />
       <span>12:00 PM</span>
     </div>

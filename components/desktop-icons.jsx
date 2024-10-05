@@ -5,6 +5,7 @@ import { SkillsWindow } from './skills-window'
 import { ContactWindow } from './contact-window'
 import { ResumeWindow } from './resume-window'
 import { IconContextMenu } from './icon-context-menu'
+import Image from 'next/image'; // Add this import
 
 export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMaximize, focusWindow, windows, iconPositions, updateIconPosition }) {
   const [selectedIcon, setSelectedIcon] = useState(null)
@@ -142,15 +143,15 @@ function DesktopIcon({ name, icon, isSelected, position, onClick, onDoubleClick,
 function getIconForName(name) {
   switch (name) {
     case 'My Projects': 
-      return <img src="https://icons.iconarchive.com/icons/icons-land/vista-hardware-devices/128/Computer-icon.png" alt="My Projects" width="55" height="55" />;
+      return <Image src="https://icons.iconarchive.com/icons/icons-land/vista-hardware-devices/128/Computer-icon.png" alt="My Projects" width={55} height={55} />;
     case 'About Me': 
-      return <img src="https://icons.iconarchive.com/icons/chrisbanks2/gCons/128/WhatsApp-icon.png" alt="About Me" width="55" height="55" />;
+      return <Image src="https://icons.iconarchive.com/icons/chrisbanks2/gCons/128/WhatsApp-icon.png" alt="About Me" width={55} height={55} />;
     case 'Skills': 
-      return <img src="https://icons.iconarchive.com/icons/limpa/curriculum-vitae/128/language-skills-icon.png" alt="Skills" width="55" height="55" />;
+      return <Image src="https://icons.iconarchive.com/icons/limpa/curriculum-vitae/128/language-skills-icon.png" alt="Skills" width={55} height={55} />;
     case 'Contact': 
-      return <img src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/128/Gmail-icon.png" alt="Contact" width="55" height="55" />;
+      return <Image src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/128/Gmail-icon.png" alt="Contact" width={55} height={55} />;
     case 'Resume': 
-      return <img src="https://icons.iconarchive.com/icons/untergunter/leaf-mimes/128/text-x-bak-icon.png" alt="Resume" width="55" height="55" />;
+      return <Image src="https://icons.iconarchive.com/icons/untergunter/leaf-mimes/128/text-x-bak-icon.png" alt="Resume" width={55} height={55} />;
     default: return '📁';
   }
 }
