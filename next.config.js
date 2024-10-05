@@ -1,6 +1,6 @@
 module.exports = {
   images: {
-    domains: ['icons.iconarchive.com'], // Ensure this domain is correctly listed
+    domains: ['icons.iconarchive.com', 'source.unsplash.com'], // Add all external domains here
   },
   // ... other configurations ...
 }
