@@ -9,12 +9,44 @@ export function MyProjectsWindow({ onClose, onMinimize, onMaximize, isMaximized,
   const [viewMode, setViewMode] = useState('icons'); // 'icons', 'list', 'details'
 
   const projects = [
-    { name: "Windows XP Portfolio", readme: "...", github: "..." },
-    { name: "E-commerce Website", readme: "...", github: "..." },
-    { name: "Task Management App", readme: "...", github: "..." },
-    { name: "Blog Platform", readme: "...", github: "..." },
-    { name: "Weather Dashboard", readme: "...", github: "..." },
-    { name: "Chat Application", readme: "...", github: "..." },
+    { 
+      name: "Ivene 1.0", 
+      readme: `Tech Stack: Next.js, Google Generative AI, Clerk, React Speech Hook, Drizzle ORM
+      - Engineered a scalable mock interview platform utilizing Next.js and Google Generative AI, implementing real-time speech-to-text capabilities with React-Speech-Recognition, achieving a 40% increase in user performance metrics.
+      - Integrated webcam functionality for immersive interview simulations and utilized Drizzle ORM with PostgreSQL to manage over 10,000 records, enhancing data retrieval speed.`,
+      github: "https://i-vene-1-0.vercel.app/" 
+    },
+    { 
+      name: "Notation", 
+      readme: `Tech Stack: Next.js, Liveblock, Google Generative AI, Clerk, Firebase, Cloudflare
+      - Architected a real-time document collaboration platform using Next.js and Gemini AI, optimizing with Cloudflare for security and increasing user engagement by 30%. Leveraged Firebase for scalable data storage.
+      - Designed a Notion-style interface for enhanced document creation and editing, integrating Google Generative AI for real-time translation, achieving 90% accuracy for multilingual collaboration.`,
+      github: "https://notation-seven.vercel.app/" 
+    },
+    { 
+      name: "Old Portfolio", 
+      readme: `Developed a personal portfolio website to showcase projects and skills.
+      - Tech Stack: HTML, CSS, JavaScript, React.js`,
+      github: "https://djport07.netlify.app/" 
+    },
+    { name: "GDSC DYPCOE Website", readme: "Part of the team that developed the official website for GDSC DYPCOE using React.js and Tailwind CSS.", github: ".https://dscdypcoe.web.app/" },
+    { name: "AI Playground", readme: "Created an interactive space where you can meet WebGPT and DALLE clones using React.js, OpenAI, and Tailwind CSS.", github: "https://github.com/DJ-BoT07/DjAI-TOOLS" },
+    { name: "CryptoVerse", readme: "Developed a cryptocurrency app that provides daily insights using charts and live data with React.js and CoinGecko API.", github: "https://github.com/DJ-BoT07/CryptoMon2" },
+    { name: "Meta Verse", readme: "An immersive MetaVerse project where you can interact with DigiMons using React Three Fiber and Three.js.", github: "https://github.com/DJ-BoT07/Portals" },
+    { name: "CodeX – Mental Health Assessment", readme: "Worked as a Frontend Developer for a virtual 3D model communication project using ReactJS, React Three Fiber, and Tailwind CSS.", github: "https://github.com/DJ-BoT07/"},
+    { 
+      name: "ACES DYPCOE Website", 
+      readme: `Part of the team for the official website of ACES DYPCOE.
+      - Tech Stack: React JS, Tailwind CSS, React Three Fiber, Node.js`,
+      github: "https://aces-dypcoe.vercel.app/" 
+    },
+    { 
+      name: "TechFest DYPCOE Website", 
+      readme: `Part of the team for the official website for Advait 2k24, one of the biggest Tech-Fests in Pune by DYPCOE.
+      - Tech Stack: React JS, Tailwind CSS, React Three Fiber, Node.js, Supabase.js`,
+      github: "https://dypcoe-techfest.vercel.app/" 
+    }
+    
   ];
 
   useEffect(() => {
@@ -210,7 +242,7 @@ function ProjectDetails({ project, onBack }) {
         className="inline-flex items-center bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
       >
         <Github size={18} className="mr-2" />
-        View on GitHub
+        View on GitHub or Link
       </a>
     </div>
   );
