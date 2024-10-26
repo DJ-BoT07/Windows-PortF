@@ -1,7 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BaseWindow } from './base-window';
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Mail, Linkedin, Github, Twitter } from 'lucide-react';
 
 export function ContactWindow({ onClose, onMinimize, onMaximize, isMaximized, zIndex }) {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <BaseWindow 
       title="Contact" 
@@ -11,38 +51,57 @@ export function ContactWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
       isMaximized={isMaximized}
       zIndex={zIndex}
     >
-      <h2 className="text-xl font-bold mb-4">Contact Me</h2>
-      <div className="space-y-4">
-        <p>
-          <span className="font-bold">Email:</span> <a href="mailto:your.email@example.com" className="text-blue-600 hover:underline">your.email@example.com</a>
-        </p>
-        <p>
-          <span className="font-bold">LinkedIn:</span> <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">linkedin.com/in/yourprofile</a>
-        </p>
-        <p>
-          <span className="font-bold">GitHub:</span> <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">github.com/yourusername</a>
-        </p>
-        <p>
-          <span className="font-bold">Twitter:</span> <a href="https://twitter.com/yourhandle" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">@yourhandle</a>
-        </p>
-      </div>
-      <div className="mt-8">
-        <h3 className="font-bold mb-2">Send me a message:</h3>
-        <form className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block mb-1">Name:</label>
-            <input type="text" id="name" name="name" className="w-full border border-gray-300 rounded px-2 py-1" />
-          </div>
-          <div>
-            <label htmlFor="email" className="block mb-1">Email:</label>
-            <input type="email" id="email" name="email" className="w-full border border-gray-300 rounded px-2 py-1" />
-          </div>
-          <div>
-            <label htmlFor="message" className="block mb-1">Message:</label>
-            <textarea id="message" name="message" rows="4" className="w-full border border-gray-300 rounded px-2 py-1"></textarea>
-          </div>
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Send</button>
-        </form>
+      <div className="p-6 bg-[#ECE9D8] h-full overflow-auto">
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-[#0054E3]">Contact Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center">
+              <Mail className="mr-2 h-4 w-4 text-[#0054E3]" />
+              <a href="mailto:djmangaonkar7@gmail.com" className="text-blue-600 hover:underline">djmangaonkar7@gmail.com</a>
+            </div>
+            <div className="flex items-center">
+              <Linkedin className="mr-2 h-4 w-4 text-[#0054E3]" />
+              <a href="https://www.linkedin.com/in/dj-mangaonkar-07k/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">linkedin.com/in/dj-mangaonkar-07k/</a>
+            </div>
+            <div className="flex items-center">
+              <Github className="mr-2 h-4 w-4 text-[#0054E3]" />
+              <a href="https://github.com/DJ-BoT07" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">github.com/DJ-BoT07</a>
+            </div>
+            <div className="flex items-center">
+              <Twitter className="mr-2 h-4 w-4 text-[#0054E3]" />
+              <a href="https://twitter.com/yourhandle" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">@yourhandle</a>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-[#0054E3]">Send me a message</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="Your email" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="message">Message</Label>
+                <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Your message" rows={4} required />
+              </div>
+              <Button type="submit" className="bg-[#0054E3] hover:bg-[#003399]" disabled={isSubmitting}>
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+              </Button>
+              {submitStatus === 'success' && <p className="text-green-600">Message sent successfully!</p>}
+              {submitStatus === 'error' && <p className="text-red-600">Error sending message. Please try again.</p>}
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </BaseWindow>
   );

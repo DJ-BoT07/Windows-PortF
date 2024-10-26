@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Clock, Clock1, Volume, Volume1Icon, Wifi } from "lucide-react"
 import Image from 'next/image'; // Add this import
@@ -51,15 +51,26 @@ function TaskbarButton({ name, icon, isActive, onClick }) {
 }
 
 function SystemTray() {
+  const [time, setTime] = useState(getFormattedTime());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(getFormattedTime()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  function getFormattedTime() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
+  }
+
   return (
     <div className="bg-[#0c60e8] text-white px-2 py-1 flex items-center flex-row space-x-1">
       <div className="flex space-x-2 items-center hover:border border-border p-2 rounded transition-all" >
-      <Volume1Icon className="w-5 h-5 hover:scale-110" />
-      <Wifi className="w-5 h-5 hover:scale-110" />
-      <Clock1 className="w-4 h-4 hover:scale-110" />
+        <Volume1Icon className="w-5 h-5 hover:scale-110" />
+        <Wifi className="w-5 h-5 hover:scale-110" />
+        <Clock1 className="w-4 h-4 hover:scale-110" />
       </div>
       <div className="flex items-center hover:border border-border p-2 py-[0.35rem] rounded transition-all">
-        {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        {time}
       </div>
     </div>
   )

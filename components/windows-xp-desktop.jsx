@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { DesktopIcons } from './desktop-icons'
 import { Taskbar } from './taskbar'
 import { StartMenu } from './start-menu'
 import { DesktopContextMenu } from './desktop-context-menu'
+import { SkillsWindow } from './skills-window'
 
 export function WindowsXpDesktop() {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
@@ -18,6 +19,11 @@ export function WindowsXpDesktop() {
     'Contact': { x: 20, y: 260 },
     'Resume': { x: 20, y: 340 }
   })
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const toggleStartMenu = () => {
     setIsStartMenuOpen(!isStartMenuOpen)
@@ -69,6 +75,10 @@ export function WindowsXpDesktop() {
       ...prev,
       [iconName]: newPosition
     }))
+  }
+
+  if (!isClient) {
+    return null; // or a loading spinner
   }
 
   return (

@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Minus, Square } from 'lucide-react';
 
-export function BaseWindow({ title, children, onClose, onMinimize, onMaximize, isMaximized, zIndex, initialPosition = { x: 100, y: 100 }, initialSize = { width: 600, height: 400 } }) {
-  const [position, setPosition] = useState(initialPosition);
-  const [size, setSize] = useState(initialSize);
+export function BaseWindow({ children, title, onClose, onMinimize, onMaximize, isMaximized, zIndex }) {
+  const [position, setPosition] = useState({ x: 100, y: 100 });
+  const [size, setSize] = useState({ width: 600, height: 400 });
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [resizeDirection, setResizeDirection] = useState('');
@@ -88,22 +88,22 @@ export function BaseWindow({ title, children, onClose, onMinimize, onMaximize, i
   return (
     <div
       ref={windowRef}
-      className="absolute bg-[#ECE9D8] border-2 border-[#0054E3] shadow-lg rounded-t-lg overflow-hidden flex flex-col"
+      className="absolute bg-[#F0F0F0] border-2 border-[#00008B] shadow-md rounded-t-lg overflow-hidden flex flex-col"
       style={windowStyle}
     >
       <div
-        className="h-8 bg-gradient-to-r from-[#0054E3] via-[#0054E3] to-[#3A8EE6] flex items-center justify-between px-2 cursor-move"
+        className="h-8 bg-gradient-to-r from-[#00008B] via-[#1E90FF] to-[#87CEFA] flex items-center justify-between px-2 cursor-move"
         onMouseDown={startDragging}
       >
         <span className="text-white font-bold">{title}</span>
         <div className="flex space-x-1">
-          <button onClick={onMinimize} className="w-5 h-5 bg-[#ECE9D8] border border-[#0054E3] flex items-center justify-center hover:bg-[#FFFFFF]">
+          <button onClick={onMinimize} className="w-5 h-5 bg-[#F0F0F0] border border-[#00008B] flex items-center justify-center hover:bg-[#FFFFFF]">
             <Minus size={10} className="text-black" />
           </button>
-          <button onClick={onMaximize} className="w-5 h-5 bg-[#ECE9D8] border border-[#0054E3] flex items-center justify-center hover:bg-[#FFFFFF]">
+          <button onClick={onMaximize} className="w-5 h-5 bg-[#F0F0F0] border border-[#00008B] flex items-center justify-center hover:bg-[#FFFFFF]">
             <Square size={10} className="text-black" />
           </button>
-          <button onClick={onClose} className="w-5 h-5 bg-[#ECE9D8] border border-[#0054E3] flex items-center justify-center hover:bg-[#FFFFFF]">
+          <button onClick={onClose} className="w-5 h-5 bg-[#F0F0F0] border border-[#00008B] flex items-center justify-center hover:bg-[#FFFFFF]">
             <X size={10} className="text-black" />
           </button>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { MyProjectsWindow } from './my-projects-window'
 import { AboutMeWindow } from './about-me-window'
-import { SkillsWindow } from './skills-window'
+import { SkillsWindow } from './skills-window'; // Named import
 import { ContactWindow } from './contact-window'
 import { ResumeWindow } from './resume-window'
 import { IconContextMenu } from './icon-context-menu'
@@ -94,7 +94,7 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
       {windows.map(window => {
         const WindowComponent = getWindowComponent(window.name);
         return (
-          !window.isMinimized && (
+          WindowComponent && !window.isMinimized && (
             <WindowComponent 
               key={window.name}
               onClose={() => removeWindow(window.name)}
