@@ -26,46 +26,46 @@ export function SkillsWindow({ onClose, onMinimize, onMaximize, isMaximized, zIn
       zIndex={zIndex}
     >
       <div className="p-4 bg-gray-100 border-t border-blue-700">
-        <h2 className="text-xl font-bold mb-4 text-blue-700 px-2 py-1 bg-blue-500 bg-gradient-to-r from-blue-600 to-blue-400 rounded-t-lg">My Skills</h2>
+        <h2 className="text-xl font-bold mb-4 text-white px-2 py-1 bg-blue-500 bg-gradient-to-r from-blue-600 to-blue-400 rounded-t-lg">
+          Technologies (June 2023– May 2024)
+        </h2>
         <div className="grid grid-cols-2 gap-4">
-          {/* Using simple icons for testing */}
           <SkillCategory 
-            title="Front-end" 
+            title="Languages" 
+            
             icon={<span role="img" aria-label="code">👨‍💻</span>}
             skills={[
-              "HTML5, CSS3, JavaScript (ES6+)",
-              "React, Next.js",
-              "Tailwind CSS, Styled Components",
-              "Redux, Context API"
+              "C++",
+              "Java",
+              "Python"
             ]} 
           />
           <SkillCategory 
-            title="Back-end" 
-            icon={<span role="img" aria-label="server">💽</span>}
+            title="Technologies and Frameworks" 
+            icon={<span role="img" aria-label="framework">⚡</span>}
             skills={[
-              "Node.js, Express",
-              "Python, Django",
-              "RESTful APIs",
-              "GraphQL"
+              "HTML, Tailwind",
+              "ReactJS, NextJS",
+              "NodeJS, ExpressJS",
+              "Firebase, MongoDB",
+              "Gemini, Hugging Face"
             ]} 
           />
           <SkillCategory 
-            title="Databases" 
-            icon={<span role="img" aria-label="database">🗄️</span>}
+            title="Deployment and Version Control" 
+            icon={<span role="img" aria-label="deploy">🚀</span>}
             skills={[
-              "MongoDB",
-              "PostgreSQL",
-              "MySQL"
+              "Git",
+              "Netlify",
+              "Vercel"
             ]} 
           />
           <SkillCategory 
-            title="Tools & Others" 
-            icon={<span role="img" aria-label="tool">🔧</span>}
+            title="Competitive Programming" 
+            icon={<span role="img" aria-label="competitive">🏆</span>}
             skills={[
-              "Git, GitHub",
-              "Docker",
-              "AWS, Heroku",
-              "Agile methodologies"
+              "HackerRank",
+              "LeetCode 200+"
             ]} 
           />
         </div>
