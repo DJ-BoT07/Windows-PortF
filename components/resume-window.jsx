@@ -1,6 +1,5 @@
 import React from 'react';
 import { BaseWindow } from './base-window';
-import Image from 'next/image';
 
 export function ResumeWindow({ onClose, onMinimize, onMaximize, isMaximized, zIndex }) {
   return (
@@ -12,14 +11,11 @@ export function ResumeWindow({ onClose, onMinimize, onMaximize, isMaximized, zIn
       isMaximized={isMaximized}
       zIndex={zIndex}
     >
-      <div className="w-full h-full relative">
-        <Image
-          src="/images/resume.png"
-          alt="Resume"
-          className="object-contain"
-          height={1000}
-          width={1000}
-          priority
+      <div className="w-full h-full">
+        <iframe
+          src="/images/resume.pdf"
+          className="w-full h-full"
+          title="Resume PDF"
         />
       </div>
     </BaseWindow>
