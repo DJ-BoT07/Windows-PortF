@@ -1,6 +1,20 @@
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
-    domains: ['icons.iconarchive.com', 'source.unsplash.com'], // Add all external domains here
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'icons.iconarchive.com',
+        pathname: '**',
+      }
+    ],
+    domains: ['icons.iconarchive.com','source.unsplash.com']
   },
-  // ... other configurations ...
+  webpack: (config) => {
+    config.resolve.alias.canvas = false
+    
+    return config
+  }
 }
+
+module.exports = nextConfig
