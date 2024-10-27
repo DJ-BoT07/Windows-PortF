@@ -72,93 +72,69 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
   }
 
   return (
-    <>
-      <div 
-        className="flex-1 p-4" 
-        onClick={() => setSelectedIcon(null)}
-        onMouseMove={onDrag}
-        onMouseUp={stopDragging}
-        onMouseLeave={stopDragging}
-      >
-        {Object.entries(iconPositions).map(([name, position]) => (
-          <DesktopIcon 
-            key={name}
-            name={name} 
-            icon={getIconForName(name)} 
-            isSelected={selectedIcon === name}
-            position={position}
-            onClick={(e) => handleIconClick(name, e)}
-            onDoubleClick={() => handleIconDoubleClick(name, getIconForName(name))}
-            onContextMenu={(e) => handleIconContextMenu(e, name)}
-            onMouseDown={(e) => startDragging(e, name)}
-          />
-        ))}
-      </div>
-      {windows.map(window => {
-        const WindowComponent = getWindowComponent(window.name);
-        return (
-          WindowComponent && !window.isMinimized && (
-            <WindowComponent 
-              key={window.name}
-              onClose={() => removeWindow(window.name)}
-              onMinimize={() => toggleMinimize(window.name)}
-              onMaximize={() => toggleMaximize(window.name)}
-              isMaximized={window.isMaximized}
-              zIndex={window.zIndex}
-              addWindow={addWindow}
-            />
-          )
-        );
-      })}
-      {contextMenuPosition && (
-        <IconContextMenu 
-          x={contextMenuPosition.x} 
-          y={contextMenuPosition.y} 
-          iconName={contextMenuPosition.iconName}
-          onClose={closeContextMenu}
-          onOpen={() => handleIconDoubleClick(contextMenuPosition.iconName, getIconForName(contextMenuPosition.iconName))}
+    <div className="flex-1 p-4 grid grid-cols-1 gap-6 w-fit">
+      {Object.entries(iconPositions).map(([name, position]) => (
+        <DesktopIcon 
+          key={name}
+          name={name} 
+          icon={getIconForName(name)} 
+          isSelected={selectedIcon === name}
+          position={position}
+          onClick={(e) => handleIconClick(name, e)}
+          onDoubleClick={() => handleIconDoubleClick(name, getIconForName(name))}
+          onContextMenu={(e) => handleIconContextMenu(e, name)}
+          onMouseDown={(e) => startDragging(e, name)}
         />
-      )}
-    </>
+      ))}
+    </div>
   )
 }
 
 function DesktopIcon({ name, icon, isSelected, position, onClick, onDoubleClick, onContextMenu, onMouseDown }) {
   return (
     <div 
-      className={`absolute flex flex-col items-center w-20 cursor-pointer group ${isSelected ? 'bg-blue-500 bg-opacity-50' : ''}`} 
+      className={`absolute flex flex-col items-center w-24 cursor-default group ${
+        isSelected ? 'bg-blue-500/30 rounded-lg' : ''
+      }`}
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu}
       onMouseDown={onMouseDown}
     >
-      <div className="mb-1 relative">
-        <div className="text-4xl w-12 h-12 flex items-center justify-center">{icon}</div>
-        <div className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-20"></div>
+      <div className="mb-1 p-2 rounded-xl bg-white/10 backdrop-blur-sm group-hover:bg-white/20 transition-all duration-200">
+        {typeof icon === 'string' ? (
+          <div className="text-4xl">{icon}</div>
+        ) : (
+          <Image src={icon} alt={name} width={48} height={48} />
+        )}
       </div>
-      <div className={`text-center text-white text-shadow px-1 py-0.5 ${isSelected ? 'bg-blue-700 bg-opacity-70' : 'bg-transparent group-hover:bg-blue-700 group-hover:bg-opacity-70'}`}>
-        <span className="text-xs leading-tight">{name}</span>
+      <div className={`px-2 py-1 rounded-md text-center ${
+        isSelected ? 'bg-blue-500 text-white' : 'text-white group-hover:bg-blue-500/20'
+      }`}>
+        <span className="text-sm font-medium">{name}</span>
       </div>
     </div>
   )
 }
 
 function getIconForName(name) {
+  // Temporarily use emojis instead of images until we have proper icons
   switch (name) {
-    case 'My Projects': 
-      return <Image src="https://icons.iconarchive.com/icons/icons-land/vista-hardware-devices/128/Computer-icon.png" alt="My Projects" width={55} height={55} />;
-    case 'About Me': 
-      return <Image src="https://icons.iconarchive.com/icons/chrisbanks2/gCons/128/WhatsApp-icon.png" alt="About Me" width={55} height={55} />;
-    case 'Skills': 
-      return <Image src="https://icons.iconarchive.com/icons/limpa/curriculum-vitae/128/language-skills-icon.png" alt="Skills" width={55} height={55} />;
-    case 'Contact': 
-      return <Image src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/128/Gmail-icon.png" alt="Contact" width={55} height={55} />;
-    case 'Resume': 
-      return <Image src="https://icons.iconarchive.com/icons/untergunter/leaf-mimes/128/text-x-bak-icon.png" alt="Resume" width={55} height={55} />;
-    case 'Terminal': 
-      return <Terminal size={55} />;
-    default: return '';
+    case 'My Projects':
+      return '📂';
+    case 'About Me':
+      return '👤';
+    case 'Skills':
+      return '🛠️';
+    case 'Contact':
+      return '📧';
+    case 'Resume':
+      return '📄';
+    case 'Terminal':
+      return '⌨️';
+    default:
+      return '📁';
   }
 }
 

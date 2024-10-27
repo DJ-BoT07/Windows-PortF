@@ -88,39 +88,51 @@ export function BaseWindow({ children, title, onClose, onMinimize, onMaximize, i
   return (
     <div
       ref={windowRef}
-      className="absolute bg-[#F0F0F0] border-2 border-[#00008B] shadow-md rounded-t-lg overflow-hidden flex flex-col"
+      className={`absolute bg-white/95 backdrop-blur-xl rounded-xl overflow-hidden flex flex-col shadow-2xl border border-white/20 transition-all duration-200 ${
+        isMaximized ? 'scale-100' : 'scale-100 hover:scale-[1.001]'
+      }`}
       style={windowStyle}
     >
       <div
-        className="h-8 bg-gradient-to-r from-[#00008B] via-[#1E90FF] to-[#87CEFA] flex items-center justify-between px-2 cursor-move"
+        className="h-7 bg-[#E7E7E7] flex items-center px-2 cursor-move relative"
         onMouseDown={startDragging}
       >
-        <span className="text-white font-bold">{title}</span>
-        <div className="flex space-x-1">
-          <button onClick={onMinimize} className="w-5 h-5 bg-[#F0F0F0] border border-[#00008B] flex items-center justify-center hover:bg-[#FFFFFF]">
-            <Minus size={10} className="text-black" />
+        {/* Window Controls */}
+        <div className="absolute left-2 flex space-x-2 z-10">
+          <button 
+            onClick={onClose} 
+            className="w-3 h-3 rounded-full bg-[#FF5F57] hover:bg-[#FF5F57]/90 group flex items-center justify-center"
+          >
+            <X className="w-2 h-2 opacity-0 group-hover:opacity-50" />
           </button>
-          <button onClick={onMaximize} className="w-5 h-5 bg-[#F0F0F0] border border-[#00008B] flex items-center justify-center hover:bg-[#FFFFFF]">
-            <Square size={10} className="text-black" />
+          <button 
+            onClick={onMinimize} 
+            className="w-3 h-3 rounded-full bg-[#FEBC2E] hover:bg-[#FEBC2E]/90 group flex items-center justify-center"
+          >
+            <Minus className="w-2 h-2 opacity-0 group-hover:opacity-50" />
           </button>
-          <button onClick={onClose} className="w-5 h-5 bg-[#F0F0F0] border border-[#00008B] flex items-center justify-center hover:bg-[#FFFFFF]">
-            <X size={10} className="text-black" />
+          <button 
+            onClick={onMaximize} 
+            className="w-3 h-3 rounded-full bg-[#28C840] hover:bg-[#28C840]/90 group flex items-center justify-center"
+          >
+            <Square className="w-2 h-2 opacity-0 group-hover:opacity-50" />
           </button>
         </div>
+        
+        {/* Window Title */}
+        <span className="flex-1 text-center text-sm font-medium text-[#4A4A4A]">{title}</span>
       </div>
-      <div className="flex-1 overflow-auto p-4 bg-white">
+
+      {/* Window Content */}
+      <div className="flex-1 overflow-auto bg-white">
         {children}
       </div>
+
+      {/* Resize Handles */}
       {!isMaximized && (
         <>
-          <div className="absolute top-0 left-0 w-1 h-full cursor-w-resize" onMouseDown={() => startResizing('w')}></div>
-          <div className="absolute top-0 right-0 w-1 h-full cursor-e-resize" onMouseDown={() => startResizing('e')}></div>
-          <div className="absolute top-0 left-0 w-full h-1 cursor-n-resize" onMouseDown={() => startResizing('n')}></div>
-          <div className="absolute bottom-0 left-0 w-full h-1 cursor-s-resize" onMouseDown={() => startResizing('s')}></div>
-          <div className="absolute top-0 left-0 w-2 h-2 cursor-nw-resize" onMouseDown={() => startResizing('nw')}></div>
-          <div className="absolute top-0 right-0 w-2 h-2 cursor-ne-resize" onMouseDown={() => startResizing('ne')}></div>
-          <div className="absolute bottom-0 left-0 w-2 h-2 cursor-sw-resize" onMouseDown={() => startResizing('sw')}></div>
-          <div className="absolute bottom-0 right-0 w-2 h-2 cursor-se-resize" onMouseDown={() => startResizing('se')}></div>
+          <div className="absolute inset-0 border border-black/5 rounded-xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize" onMouseDown={() => startResizing('se')} />
         </>
       )}
     </div>

@@ -1,6 +1,9 @@
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
-    domains: ['icons.iconarchive.com', 'source.unsplash.com'], // Add all external domains here
+    domains: ['512pixels.net', 'icons.iconarchive.com', 'w.wallhaven.cc'],
+    unoptimized: true,
   },
-  // ... other configurations ...
-}
+};
+
+module.exports = nextConfig;

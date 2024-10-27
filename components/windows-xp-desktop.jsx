@@ -11,6 +11,10 @@ import { MyProjectsWindow } from './my-projects-window'
 import { AboutMeWindow } from './about-me-window'
 import { ContactWindow } from './contact-window'
 import { ResumeWindow } from './resume-window'
+import { Battery } from 'lucide-react'
+import { Wifi } from 'lucide-react'
+import { Apple } from 'lucide-react'
+import Image from 'next/image'
 
 export function WindowsXpDesktop() {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
@@ -26,9 +30,14 @@ export function WindowsXpDesktop() {
     'Terminal': { x: 20, y: 420 } // Add the Terminal icon position
   })
   const [isClient, setIsClient] = useState(false)
+  const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
 
   useEffect(() => {
     setIsClient(true)
+    // Load background image
+    const img = new window.Image();
+    img.src = 'https://512pixels.net/downloads/macos-wallpapers-thumbs/10-12--thumb.jpg';
+    img.onload = () => setIsBackgroundLoaded(true);
   }, [])
 
   const toggleStartMenu = () => {
@@ -152,49 +161,76 @@ export function WindowsXpDesktop() {
 
   return (
     <div
-      className="h-screen w-full bg-[#3a6ea5] overflow-hidden flex flex-col relative"
+      className={`h-screen w-full overflow-hidden flex flex-col relative`}
       style={{
-        backgroundImage: "url('https://i.imgur.com/Zk6TR5k.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        background: 'linear-gradient(to bottom, #2c5364, #203a43, #0f2027)' // Fallback gradient
       }}
       onContextMenu={handleContextMenu}
       onClick={closeContextMenu}
     >
-      <DesktopIcons 
-        addWindow={addWindow} 
-        removeWindow={removeWindow}
-        toggleMinimize={toggleMinimize}
-        toggleMaximize={toggleMaximize}
-        focusWindow={focusWindow}
-        windows={windows}
-        iconPositions={iconPositions}
-        updateIconPosition={updateIconPosition}
+      {/* Background with blur effect */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center transition-opacity duration-500"
+        style={{
+          backgroundImage: "url('https://512pixels.net/downloads/macos-wallpapers-thumbs/10-12--thumb.jpg')",
+          opacity: isBackgroundLoaded ? 1 : 0,
+        }}
       />
-      {isStartMenuOpen && (
-        <div className="absolute bottom-12 left-0 z-50">
-          <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} addWindow={addWindow} />
-        </div>
-      )}
-      {contextMenuPosition && (
-        <DesktopContextMenu 
-          x={contextMenuPosition.x} 
-          y={contextMenuPosition.y} 
-          onClose={closeContextMenu}
-        />
-      )}
-      <Taskbar 
-        toggleStartMenu={toggleStartMenu} 
-        windows={windows}
-        focusWindow={focusWindow}
-      />
-      {windows.map(window => (
-        !window.isMinimized && (
-          <div key={window.name} style={{ zIndex: window.zIndex }}>
-            {getWindowComponent(window)}
+
+      {/* Content overlay */}
+      <div className="relative z-10 flex flex-col h-full">
+        {/* macOS Menu Bar */}
+        <div className="h-7 bg-black/20 backdrop-blur-xl flex items-center px-2 text-white">
+          <div className="flex items-center space-x-5 text-sm">
+            <button className="hover:bg-white/10 px-2 py-0.5 rounded">
+              <Apple className="w-4 h-4" />
+            </button>
+            <span className="font-semibold">Finder</span>
+            <span>File</span>
+            <span>Edit</span>
+            <span>View</span>
+            <span>Go</span>
+            <span>Window</span>
+            <span>Help</span>
           </div>
-        )
-      ))}
+          <div className="flex-1" />
+          <div className="flex items-center space-x-4 text-sm">
+            <div className="flex items-center space-x-2">
+              <Battery className="w-4 h-4" />
+              <Wifi className="w-4 h-4" />
+              <span>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Content */}
+        <div className="flex-1 relative">
+          <DesktopIcons 
+            addWindow={addWindow}
+            removeWindow={removeWindow}
+            toggleMinimize={toggleMinimize}
+            toggleMaximize={toggleMaximize}
+            focusWindow={focusWindow}
+            windows={windows}
+            iconPositions={iconPositions}
+            updateIconPosition={updateIconPosition}
+          />
+          
+          {windows.map(window => (
+            !window.isMinimized && (
+              <div key={window.name} className="window-enter" style={{ zIndex: window.zIndex }}>
+                {getWindowComponent(window)}
+              </div>
+            )
+          ))}
+        </div>
+
+        {/* macOS Dock */}
+        <Taskbar 
+          windows={windows}
+          focusWindow={focusWindow}
+        />
+      </div>
     </div>
   );
 }
