@@ -102,8 +102,7 @@ export function BaseWindow({ children, title, onClose, onMinimize, onMaximize, i
       ref={windowRef}
       className="absolute bg-[#F0F0F0] border-2 border-[#00008B] shadow-md rounded-t-lg overflow-hidden flex flex-col"
       style={windowStyle}
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
+      // Only animate on exit
       exit={{ scale: 0.8, opacity: 0 }}
       transition={{ 
         type: "spring",

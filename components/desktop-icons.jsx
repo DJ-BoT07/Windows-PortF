@@ -118,9 +118,7 @@ function DesktopIcon({ name, icon, isSelected, position, onClick, onDoubleClick,
       onContextMenu={onContextMenu}
       onMouseDown={onMouseDown}
       whileTap={{ scale: 0.95 }}
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      // Removed initial and animate properties to prevent startup animation
     >
       <div className="mb-1 relative">
         <div className="text-4xl w-12 h-12 flex items-center justify-center">{icon}</div>

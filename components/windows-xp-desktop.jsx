@@ -5,32 +5,38 @@ import { DesktopIcons } from './desktop-icons'
 import { Taskbar } from './taskbar'
 import { StartMenu } from './start-menu'
 import { DesktopContextMenu } from './desktop-context-menu'
-import { SkillsWindow } from './skills-window'
-import { TerminalWindow } from './terminal-window'
+import { StartupScreen } from './startup-screen'
+import { motion, AnimatePresence } from 'framer-motion'
 import { MyProjectsWindow } from './my-projects-window'
 import { AboutMeWindow } from './about-me-window'
+import { SkillsWindow } from './skills-window'
 import { ContactWindow } from './contact-window'
 import { ResumeWindow } from './resume-window'
-import { AnimatePresence } from 'framer-motion'
+import { TerminalWindow } from './terminal-window'
 
 export function WindowsXpDesktop() {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
   const [windows, setWindows] = useState([])
   const [contextMenuPosition, setContextMenuPosition] = useState(null)
   const [nextZIndex, setNextZIndex] = useState(1)
+  const [isClient, setIsClient] = useState(false)
+  const [isStarting, setIsStarting] = useState(true)
   const [iconPositions, setIconPositions] = useState({
     'My Projects': { x: 20, y: 20 },
     'About Me': { x: 20, y: 100 },
     'Skills': { x: 20, y: 180 },
     'Contact': { x: 20, y: 260 },
     'Resume': { x: 20, y: 340 },
-    'Terminal': { x: 20, y: 420 } // Add the Terminal icon position
+    'Terminal': { x: 20, y: 420 }
   })
-  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
   }, [])
+
+  const handleStartupComplete = () => {
+    setIsStarting(false)
+  }
 
   const toggleStartMenu = () => {
     setIsStartMenuOpen(!isStartMenuOpen)
@@ -91,9 +97,9 @@ export function WindowsXpDesktop() {
     }))
   }
 
-  const getWindowComponent = (window) => {
+  function getWindowComponent(window) {
     switch (window.name) {
-      case 'My Projects':
+      case 'My Projects': 
         return <MyProjectsWindow 
           onClose={() => removeWindow(window.name)}
           onMinimize={() => toggleMinimize(window.name)}
@@ -145,53 +151,54 @@ export function WindowsXpDesktop() {
       default:
         return null;
     }
-  };
+  }
 
   if (!isClient) {
-    return null; // or a loading spinner
+    return null
   }
 
   return (
-    <div
-      className="h-screen w-full bg-[#3a6ea5] overflow-hidden flex flex-col relative"
-      style={{
-        backgroundImage: "url('https://i.imgur.com/Zk6TR5k.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}
-      onContextMenu={handleContextMenu}
-      onClick={closeContextMenu}
-    >
-      <DesktopIcons 
-        addWindow={addWindow} 
-        removeWindow={removeWindow}
-        toggleMinimize={toggleMinimize}
-        toggleMaximize={toggleMaximize}
-        focusWindow={focusWindow}
-        windows={windows}
-        iconPositions={iconPositions}
-        updateIconPosition={updateIconPosition}
-      />
+    <>
       <AnimatePresence>
+        {isStarting && <StartupScreen onStartupComplete={handleStartupComplete} />}
+      </AnimatePresence>
+      <div
+        className="h-screen w-full bg-[#3a6ea5] overflow-hidden flex flex-col relative"
+        style={{
+          backgroundImage: "url('https://i.imgur.com/Zk6TR5k.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+        onContextMenu={handleContextMenu}
+        onClick={closeContextMenu}
+      >
+        <DesktopIcons 
+          addWindow={addWindow} 
+          removeWindow={removeWindow}
+          toggleMinimize={toggleMinimize}
+          toggleMaximize={toggleMaximize}
+          focusWindow={focusWindow}
+          windows={windows}
+          iconPositions={iconPositions}
+          updateIconPosition={updateIconPosition}
+        />
         {isStartMenuOpen && (
           <div className="absolute bottom-12 left-0 z-50">
             <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} addWindow={addWindow} />
           </div>
         )}
-      </AnimatePresence>
-      {contextMenuPosition && (
-        <DesktopContextMenu 
-          x={contextMenuPosition.x} 
-          y={contextMenuPosition.y} 
-          onClose={closeContextMenu}
+        {contextMenuPosition && (
+          <DesktopContextMenu 
+            x={contextMenuPosition.x} 
+            y={contextMenuPosition.y} 
+            onClose={closeContextMenu}
+          />
+        )}
+        <Taskbar 
+          toggleStartMenu={toggleStartMenu} 
+          windows={windows}
+          focusWindow={focusWindow}
         />
-      )}
-      <Taskbar 
-        toggleStartMenu={toggleStartMenu} 
-        windows={windows}
-        focusWindow={focusWindow}
-      />
-      <AnimatePresence>
         {windows.map(window => (
           !window.isMinimized && (
             <div key={window.name} style={{ zIndex: window.zIndex }}>
@@ -199,7 +206,7 @@ export function WindowsXpDesktop() {
             </div>
           )
         ))}
-      </AnimatePresence>
-    </div>
-  );
+      </div>
+    </>
+  )
 }

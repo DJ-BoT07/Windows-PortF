@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BaseWindow } from './base-window';
 import { ChevronRight, ChevronLeft, ArrowUp, Search, Folder, FileText, Github } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function MyProjectsWindow({ onClose, onMinimize, onMaximize, isMaximized, zIndex }) {
   const [selectedProject, setSelectedProject] = useState(null);
@@ -72,6 +73,35 @@ export function MyProjectsWindow({ onClose, onMinimize, onMaximize, isMaximized,
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    },
+    exit: { opacity: 0 }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 25
+      }
+    },
+    exit: { 
+      opacity: 0,
+      y: -20,
+      transition: { duration: 0.2 }
+    }
+  };
+
   return (
     <BaseWindow 
       title="My Projects" 
@@ -131,11 +161,23 @@ export function MyProjectsWindow({ onClose, onMinimize, onMaximize, isMaximized,
           </div>
         </div>
         <div className="flex-1 bg-white p-2 overflow-auto">
-          {selectedProject ? (
-            <ProjectDetails project={selectedProject} onBack={() => navigateTo(null)} />
-          ) : (
-            <ProjectList projects={projects} viewMode={viewMode} onSelect={navigateTo} />
-          )}
+          <AnimatePresence mode="wait">
+            {selectedProject ? (
+              <ProjectDetails 
+                key="details"
+                project={selectedProject} 
+                onBack={() => navigateTo(null)} 
+              />
+            ) : (
+              <div key="list">
+                <ProjectList 
+                  projects={projects} 
+                  viewMode={viewMode} 
+                  onSelect={navigateTo}
+                />
+              </div>
+            )}
+          </AnimatePresence>
         </div>
         <div className="bg-[#ECE9D8] border-t border-[#ACA899] p-1 flex items-center">
           <span className="text-sm mr-2">{projects.length} objects</span>
@@ -159,7 +201,12 @@ function ProjectList({ projects, viewMode, onSelect }) {
     return (
       <div className="grid grid-cols-4 gap-4">
         {projects.map((project, index) => (
-          <ProjectFolder key={index} name={project.name} onClick={() => onSelect(project)} />
+          <div key={index}>
+            <ProjectFolder 
+              name={project.name} 
+              onClick={() => onSelect(project)} 
+            />
+          </div>
         ))}
       </div>
     );
@@ -167,8 +214,11 @@ function ProjectList({ projects, viewMode, onSelect }) {
     return (
       <div className="space-y-1">
         {projects.map((project, index) => (
-          <div key={index} className="flex items-center hover:bg-[#316AC5] hover:text-white cursor-pointer p-1"
-               onClick={() => onSelect(project)}>
+          <div
+            key={index}
+            className="flex items-center cursor-pointer p-1 rounded hover:bg-[#316AC5] hover:text-white"
+            onClick={() => onSelect(project)}
+          >
             <Folder size={16} className="mr-2 text-[#FCD364]" />
             <span className="text-sm">{project.name}</span>
           </div>
@@ -187,8 +237,11 @@ function ProjectList({ projects, viewMode, onSelect }) {
         </thead>
         <tbody>
           {projects.map((project, index) => (
-            <tr key={index} className="hover:bg-[#316AC5] hover:text-white cursor-pointer"
-                onClick={() => onSelect(project)}>
+            <tr
+              key={index}
+              className="cursor-pointer hover:bg-[#316AC5] hover:text-white"
+              onClick={() => onSelect(project)}
+            >
               <td className="p-1 text-sm flex items-center">
                 <Folder size={16} className="mr-2 text-[#FCD364]" />
                 {project.name}
@@ -216,34 +269,72 @@ function ProjectFolder({ name, onClick }) {
 }
 
 function ProjectDetails({ project, onBack }) {
+  const detailsVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 25
+      }
+    },
+    exit: { 
+      opacity: 0, 
+      x: -50,
+      transition: { duration: 0.2 }
+    }
+  };
+
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center mb-4">
-        <button 
-          onClick={onBack}
-          className="flex items-center text-sm text-blue-600 hover:underline"
-        >
-          <ChevronLeft size={16} className="mr-1" />
-          Back to projects
-        </button>
-      </div>
-      <h2 className="text-xl font-bold mb-4">{project.name}</h2>
-      <div className="bg-gray-100 p-4 rounded mb-4 flex-1 overflow-auto">
+    <motion.div 
+      className="h-full flex flex-col"
+      variants={detailsVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
+      <motion.button 
+        onClick={onBack}
+        className="flex items-center text-sm text-blue-600 hover:underline mb-4"
+        whileHover={{ x: -5 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <ChevronLeft size={16} className="mr-1" />
+        Back to projects
+      </motion.button>
+      <motion.h2 
+        className="text-xl font-bold mb-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        {project.name}
+      </motion.h2>
+      <motion.div 
+        className="bg-gray-100 p-4 rounded mb-4 flex-1 overflow-auto"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
         <h3 className="font-bold mb-2 flex items-center">
           <FileText size={18} className="mr-2" />
           README.txt
         </h3>
         <p className="text-sm whitespace-pre-wrap">{project.readme}</p>
-      </div>
-      <a 
+      </motion.div>
+      <motion.a 
         href={project.github} 
         target="_blank" 
         rel="noopener noreferrer" 
         className="inline-flex items-center bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         <Github size={18} className="mr-2" />
         View on GitHub or Link
-      </a>
-    </div>
+      </motion.a>
+    </motion.div>
   );
 }

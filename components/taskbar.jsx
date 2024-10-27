@@ -46,8 +46,6 @@ function TaskbarButton({ name, icon, isActive, onClick }) {
       onClick={onClick}
       whileHover={{ scale: 1 }}
       whileTap={{ scale: 0.95 }}
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0, opacity: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
