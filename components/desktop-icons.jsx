@@ -15,7 +15,7 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
   const [draggingIcon, setDraggingIcon] = useState(null)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
 
-  const toggleWindow = (windowName, icon) => {
+  const toggleWindow = (windowName, icon, position = { x: 100, y: 100 }) => {
     const existingWindow = windows.find(w => w.name === windowName);
     if (existingWindow) {
       if (existingWindow.isMinimized) {
@@ -24,7 +24,7 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
         focusWindow(windowName);
       }
     } else {
-      addWindow(windowName, icon);
+      addWindow(windowName, icon, position);
     }
   };
 
@@ -34,7 +34,8 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
   }
 
   const handleIconDoubleClick = (name, icon) => {
-    toggleWindow(name, icon)
+    const position = { x: Math.random() * 200 + 100, y: Math.random() * 200 + 100 };
+    toggleWindow(name, icon, position);
   }
 
   const handleIconContextMenu = (e, name) => {
@@ -104,6 +105,7 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
               onMaximize={() => toggleMaximize(window.name)}
               isMaximized={window.isMaximized}
               zIndex={window.zIndex}
+              addWindow={addWindow}
             />
           )
         );
@@ -156,7 +158,7 @@ function getIconForName(name) {
       return <Image src="https://icons.iconarchive.com/icons/untergunter/leaf-mimes/128/text-x-bak-icon.png" alt="Resume" width={55} height={55} />;
     case 'Terminal': 
       return <Terminal size={55} />;
-    default: return '📁';
+    default: return '';
   }
 }
 

@@ -6,6 +6,7 @@ import { Taskbar } from './taskbar'
 import { StartMenu } from './start-menu'
 import { DesktopContextMenu } from './desktop-context-menu'
 import { SkillsWindow } from './skills-window'
+import { TerminalWindow } from './terminal-window'
 
 export function WindowsXpDesktop() {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
@@ -30,10 +31,16 @@ export function WindowsXpDesktop() {
     setIsStartMenuOpen(!isStartMenuOpen)
   }
 
-  const addWindow = (windowName, icon, component) => {
+  const addWindow = (windowName, icon, position = { x: 100, y: 100 }) => {
     if (!windows.find(w => w.name === windowName)) {
-      console.log(`Adding window: ${windowName}`);
-      setWindows([...windows, { name: windowName, icon, component, isMinimized: false, isMaximized: false, zIndex: nextZIndex }]);
+      setWindows([...windows, { 
+        name: windowName, 
+        icon, 
+        position,
+        isMinimized: false, 
+        isMaximized: false, 
+        zIndex: nextZIndex 
+      }]);
       setNextZIndex(nextZIndex + 1);
     }
   };
@@ -78,6 +85,62 @@ export function WindowsXpDesktop() {
       [iconName]: newPosition
     }))
   }
+
+  const getWindowComponent = (window) => {
+    switch (window.name) {
+      case 'My Projects':
+        return <MyProjectsWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'About Me':
+        return <AboutMeWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'Skills':
+        return <SkillsWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'Contact':
+        return <ContactWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'Resume':
+        return <ResumeWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'Terminal':
+        return <TerminalWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+          addWindow={addWindow}
+        />;
+      default:
+        return null;
+    }
+  };
 
   if (!isClient) {
     return null; // or a loading spinner
@@ -124,8 +187,7 @@ export function WindowsXpDesktop() {
       {windows.map(window => (
         !window.isMinimized && (
           <div key={window.name} style={{ zIndex: window.zIndex }}>
-            {console.log(`Rendering window: ${window.name}`)}
-            {window.component}
+            {getWindowComponent(window)}
           </div>
         )
       ))}
