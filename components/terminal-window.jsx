@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { BaseWindow } from './base-window';
 import { Terminal } from 'lucide-react'; // Import the terminal icon
 import { useRouter } from "next/navigation";
@@ -418,7 +418,7 @@ Active Connections
     ]);
   }, []);
 
-  const executeCommand = (input) => {
+  const executeCommand = useCallback((input) => {
     if (!input) return;
 
     // Add command to output with proper formatting
@@ -441,29 +441,29 @@ Active Connections
     if (output) {
       setTerminalOutput(prev => [...prev, output]);
     }
-  };
-
-  const handleKey = (event) => {
-    if (BLACKLISTED_KEY_CODES.includes(event.keyCode)) return;
-    event.preventDefault();
-
-    const currentKey = event.key;
-    if (currentKey === "Enter") {
-      executeCommand(userInput.trim());
-      setUserInput("");
-    } else if (currentKey === "Backspace") {
-      setUserInput((prev) => prev.slice(0, -1));
-    } else {
-      setUserInput((prev) => prev + currentKey);
-    }
-  };
+  }, [currentDirectory, COMMANDS]);
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKey);
-    return () => {
-      window.removeEventListener("keydown", handleKey);
+    const currentHandleKey = (event) => {
+      if (BLACKLISTED_KEY_CODES.includes(event.keyCode)) return;
+      event.preventDefault();
+
+      const currentKey = event.key;
+      if (currentKey === "Enter") {
+        executeCommand(userInput.trim());
+        setUserInput("");
+      } else if (currentKey === "Backspace") {
+        setUserInput((prev) => prev.slice(0, -1));
+      } else {
+        setUserInput((prev) => prev + currentKey);
+      }
     };
-  }, [userInput]);
+
+    window.addEventListener("keydown", currentHandleKey);
+    return () => {
+      window.removeEventListener("keydown", currentHandleKey);
+    };
+  }, [userInput, executeCommand]); // Add executeCommand to dependencies
 
   return (
     <BaseWindow

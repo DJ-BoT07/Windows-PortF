@@ -7,6 +7,10 @@ import { StartMenu } from './start-menu'
 import { DesktopContextMenu } from './desktop-context-menu'
 import { SkillsWindow } from './skills-window'
 import { TerminalWindow } from './terminal-window'
+import { MyProjectsWindow } from './my-projects-window'
+import { AboutMeWindow } from './about-me-window'
+import { ContactWindow } from './contact-window'
+import { ResumeWindow } from './resume-window'
 
 export function WindowsXpDesktop() {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
