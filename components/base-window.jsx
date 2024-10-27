@@ -101,22 +101,26 @@ export function BaseWindow({ children, title, onClose, onMinimize, onMaximize, i
     <motion.div
       ref={windowRef}
       className="absolute bg-[#F0F0F0] border-2 border-[#00008B] shadow-md rounded-t-lg overflow-hidden flex flex-col"
-      style={windowStyle}
-      // Only animate on exit
-      exit={{ scale: 0.8, opacity: 0 }}
+      style={{
+        ...windowStyle,
+        transform: 'none' // Prevent Framer Motion from applying transforms
+      }}
+      initial={{ 
+        scale: 0.3,
+        opacity: 0
+      }}
+      animate={{ 
+        scale: 1,
+        opacity: 1
+      }}
+      exit={{ scale: 0.3, opacity: 0 }}
       transition={{ 
         type: "spring",
-        stiffness: 800,
-        damping: 35,
-        mass: 0.5
+        stiffness: 500,
+        damping: 30,
+        mass: 1
       }}
-      layoutTransition={{
-        type: "spring",
-        stiffness: 800,
-        damping: 35,
-        mass: 0.5
-      }}
-      layout
+      dragMomentum={false} // Disable momentum for smoother movement
     >
       <div
         className="h-8 bg-gradient-to-r from-[#00008B] via-[#1E90FF] to-[#87CEFA] flex items-center justify-between px-2 cursor-move select-none"

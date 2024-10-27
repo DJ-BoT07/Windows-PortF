@@ -182,11 +182,13 @@ export function WindowsXpDesktop() {
           iconPositions={iconPositions}
           updateIconPosition={updateIconPosition}
         />
-        {isStartMenuOpen && (
-          <div className="absolute bottom-12 left-0 z-50">
-            <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} addWindow={addWindow} />
-          </div>
-        )}
+        <AnimatePresence>
+          {isStartMenuOpen && (
+            <div className="absolute bottom-12 left-0 z-50">
+              <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} addWindow={addWindow} />
+            </div>
+          )}
+        </AnimatePresence>
         {contextMenuPosition && (
           <DesktopContextMenu 
             x={contextMenuPosition.x} 
