@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { BaseWindow } from './base-window';
 import { Terminal } from 'lucide-react'; // Import the terminal icon
 import { useRouter } from "next/navigation";
 import Image from 'next/image';
+
+// Move BLACKLISTED_KEY_CODES outside the component since it's constant
+const BLACKLISTED_KEY_CODES = [38, 40, 37, 39, 18, 20, 17, 16, 9, 27, 144];
 
 export function TerminalWindow({ onClose, onMinimize, onMaximize, isMaximized, zIndex, addWindow }) {
   const [userInput, setUserInput] = useState("");
@@ -12,26 +15,8 @@ export function TerminalWindow({ onClose, onMinimize, onMaximize, isMaximized, z
   const [currentDirectory, setCurrentDirectory] = useState("C:\\Users\\Guest");
   const router = useRouter();
 
-  const BLACKLISTED_KEY_CODES = [38, 40, 37, 39, 18, 20, 17, 16, 9, 27, 144];
-
-  // Simulated file system
-  const fileSystem = {
-    "C:": {
-      "Users": {
-        "Guest": {
-          "Documents": {},
-          "Desktop": {},
-          "Downloads": {},
-        }
-      },
-      "Windows": {
-        "system32": {}
-      },
-      "Program Files": {}
-    }
-  };
-
-  const COMMANDS = {
+  // Move COMMANDS inside useMemo to prevent recreation on every render
+  const COMMANDS = useMemo(() => ({
     help: (command) => {
       if (command) {
         const helpTexts = {
@@ -390,41 +375,14 @@ Active Connections
       }
       return "Error: Cannot open window";
     },
-  };
+  }), [addWindow, currentDirectory, onClose]); // Add dependencies that are used inside commands
 
-  // Add this helper function at the top level of the file
-  function getIconForName(name) {
-    switch (name) {
-      case 'My Projects': 
-        return <Image src="https://icons.iconarchive.com/icons/icons-land/vista-hardware-devices/128/Computer-icon.png" alt="My Projects" width={55} height={55} />;
-      case 'About Me': 
-        return <Image src="https://icons.iconarchive.com/icons/chrisbanks2/gCons/128/WhatsApp-icon.png" alt="About Me" width={55} height={55} />;
-      case 'Skills': 
-        return <Image src="https://icons.iconarchive.com/icons/limpa/curriculum-vitae/128/language-skills-icon.png" alt="Skills" width={55} height={55} />;
-      case 'Contact': 
-        return <Image src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/128/Gmail-icon.png" alt="Contact" width={55} height={55} />;
-      case 'Resume': 
-        return <Image src="https://icons.iconarchive.com/icons/untergunter/leaf-mimes/128/text-x-bak-icon.png" alt="Resume" width={55} height={55} />;
-      default: 
-        return '📁';
-    }
-  }
-
-  useEffect(() => {
-    setTerminalOutput([
-      `Microsoft Windows XP [Version 5.1.2600]`,
-      `(C) Copyright 1985-2001 Microsoft Corp.`,
-      ``,
-    ]);
-  }, []);
-
+  // Move executeCommand inside useCallback with proper dependencies
   const executeCommand = useCallback((input) => {
     if (!input) return;
 
-    // Add command to output with proper formatting
     setTerminalOutput(prev => [...prev, `${currentDirectory}>${input}`]);
 
-    // Parse command and arguments
     const [cmd, ...args] = input.trim().toLowerCase().split(" ");
     const argsString = args.join(" ");
 
@@ -436,13 +394,13 @@ Active Connections
       return;
     }
 
-    // Execute command
     const output = COMMANDS[cmd](argsString);
     if (output) {
       setTerminalOutput(prev => [...prev, output]);
     }
-  }, [currentDirectory, COMMANDS]);
+  }, [COMMANDS, currentDirectory]);
 
+  // Update useEffect with all dependencies
   useEffect(() => {
     const currentHandleKey = (event) => {
       if (BLACKLISTED_KEY_CODES.includes(event.keyCode)) return;
@@ -463,7 +421,15 @@ Active Connections
     return () => {
       window.removeEventListener("keydown", currentHandleKey);
     };
-  }, [userInput, executeCommand]); // Add executeCommand to dependencies
+  }, [userInput, executeCommand]); // BLACKLISTED_KEY_CODES is now constant
+
+  useEffect(() => {
+    setTerminalOutput([
+      `Microsoft Windows XP [Version 5.1.2600]`,
+      `(C) Copyright 1985-2001 Microsoft Corp.`,
+      ``,
+    ]);
+  }, []);
 
   return (
     <BaseWindow
