@@ -12,6 +12,44 @@ export function StartMenu({ closeStartMenu, addWindow }) {
     closeStartMenu();
   };
 
+  const handleTurnOff = () => {
+    if (window.confirm('Are you sure you want to Shut Down?')) {
+      const overlay = document.createElement('div');
+      overlay.className = 'fixed inset-0 bg-black z-[9999] flex items-center justify-center';
+      
+      const text = document.createElement('div');
+      text.className = 'text-white text-2xl';
+      text.innerText = 'Shutting down...';
+      overlay.appendChild(text);
+
+      document.body.appendChild(overlay);
+
+      setTimeout(() => {
+        window.close();
+      }, 3000);
+    }
+    closeStartMenu();
+  };
+
+  const handleRestart = () => {
+    if (window.confirm('Are you sure you want to restart the computer?')) {
+      const overlay = document.createElement('div');
+      overlay.className = 'fixed inset-0 bg-black z-[9999] flex items-center justify-center';
+      
+      const text = document.createElement('div');
+      text.className = 'text-white text-2xl';
+      text.innerText = 'Restarting...';
+      overlay.appendChild(text);
+
+      document.body.appendChild(overlay);
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    }
+    closeStartMenu();
+  };
+
   return (
     <div className="absolute left-0 bottom-0 w-80 bg-[#4282d6] border-2 border-[#3169c6] shadow-lg rounded-tr-lg overflow-hidden">
       <div className="h-16 bg-gradient-to-b from-[#1c3e8b] to-[#3165ca] flex items-center px-4">
@@ -45,6 +83,25 @@ export function StartMenu({ closeStartMenu, addWindow }) {
             onMouseEnter={() => setActiveSubmenu('allPrograms')}
             onMouseLeave={() => setActiveSubmenu(null)}
           />
+          <div className="border-t border-gray-300 my-2"></div>
+          <button
+            className="w-full text-left"
+            onClick={handleTurnOff}
+          >
+            <MenuItem 
+              icon="⭕" 
+              name="Turn Off Computer" 
+            />
+          </button>
+          <button
+            className="w-full text-left"
+            onClick={handleRestart}
+          >
+            <MenuItem 
+              icon="🔄" 
+              name="Restart" 
+            />
+          </button>
         </div>
         <div className="w-32 bg-[#d3e5fa] p-2">
           <SmallMenuItem icon="📊" name="My Recent Documents" />
