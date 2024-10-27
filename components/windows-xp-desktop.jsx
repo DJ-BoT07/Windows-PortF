@@ -17,7 +17,8 @@ export function WindowsXpDesktop() {
     'About Me': { x: 20, y: 100 },
     'Skills': { x: 20, y: 180 },
     'Contact': { x: 20, y: 260 },
-    'Resume': { x: 20, y: 340 }
+    'Resume': { x: 20, y: 340 },
+    'Terminal': { x: 20, y: 420 } // Add the Terminal icon position
   })
   const [isClient, setIsClient] = useState(false)
 
@@ -29,12 +30,13 @@ export function WindowsXpDesktop() {
     setIsStartMenuOpen(!isStartMenuOpen)
   }
 
-  const addWindow = (windowName, icon) => {
+  const addWindow = (windowName, icon, component) => {
     if (!windows.find(w => w.name === windowName)) {
-      setWindows([...windows, { name: windowName, icon, isMinimized: false, isMaximized: false, zIndex: nextZIndex }])
-      setNextZIndex(nextZIndex + 1)
+      console.log(`Adding window: ${windowName}`);
+      setWindows([...windows, { name: windowName, icon, component, isMinimized: false, isMaximized: false, zIndex: nextZIndex }]);
+      setNextZIndex(nextZIndex + 1);
     }
-  }
+  };
 
   const removeWindow = (windowName) => {
     setWindows(windows.filter(w => w.name !== windowName))
@@ -104,7 +106,7 @@ export function WindowsXpDesktop() {
       />
       {isStartMenuOpen && (
         <div className="absolute bottom-12 left-0 z-50">
-          <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} />
+          <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} addWindow={addWindow} />
         </div>
       )}
       {contextMenuPosition && (
@@ -119,6 +121,14 @@ export function WindowsXpDesktop() {
         windows={windows}
         focusWindow={focusWindow}
       />
+      {windows.map(window => (
+        !window.isMinimized && (
+          <div key={window.name} style={{ zIndex: window.zIndex }}>
+            {console.log(`Rendering window: ${window.name}`)}
+            {window.component}
+          </div>
+        )
+      ))}
     </div>
   );
 }

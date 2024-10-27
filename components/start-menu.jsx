@@ -1,7 +1,16 @@
 import React, { useState } from 'react'
+ // Ensure the file name matches
 
-export function StartMenu({ closeStartMenu }) {
-  const [activeSubmenu, setActiveSubmenu] = useState(null)
+export function StartMenu({ closeStartMenu, addWindow }) {
+  const [activeSubmenu, setActiveSubmenu] = useState(null);
+
+  const openBrowser = () => {
+    // Open Google in a new tab/window
+    window.open('https://www.google.com', '_blank', 'noopener,noreferrer');
+    
+    // Close the start menu after opening the link
+    closeStartMenu();
+  };
 
   return (
     <div className="absolute left-0 bottom-0 w-80 bg-[#4282d6] border-2 border-[#3169c6] shadow-lg rounded-tr-lg overflow-hidden">
@@ -13,7 +22,16 @@ export function StartMenu({ closeStartMenu }) {
       </div>
       <div className="flex">
         <div className="w-48 bg-white p-2">
-          <MenuItem icon="📄" name="Internet" highlight={true} />
+          <button
+            className="w-full text-left"
+            onClick={openBrowser}
+          >
+            <MenuItem 
+              icon="🌐" 
+              name="Internet" 
+              highlight={true} 
+            />
+          </button>
           <MenuItem icon="📧" name="E-mail" />
           <div className="border-t border-gray-300 my-2"></div>
           <MenuItem icon="💻" name="My Computer" />

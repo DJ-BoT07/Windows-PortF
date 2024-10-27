@@ -4,8 +4,10 @@ import { AboutMeWindow } from './about-me-window'
 import { SkillsWindow } from './skills-window'; // Named import
 import { ContactWindow } from './contact-window'
 import { ResumeWindow } from './resume-window'
+import { TerminalWindow } from './terminal-window' // Import the TerminalWindow
 import { IconContextMenu } from './icon-context-menu'
 import Image from 'next/image'; // Add this import
+import { Terminal } from 'lucide-react';
 
 export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMaximize, focusWindow, windows, iconPositions, updateIconPosition }) {
   const [selectedIcon, setSelectedIcon] = useState(null)
@@ -152,6 +154,8 @@ function getIconForName(name) {
       return <Image src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/128/Gmail-icon.png" alt="Contact" width={55} height={55} />;
     case 'Resume': 
       return <Image src="https://icons.iconarchive.com/icons/untergunter/leaf-mimes/128/text-x-bak-icon.png" alt="Resume" width={55} height={55} />;
+    case 'Terminal': 
+      return <Terminal size={55} />;
     default: return '📁';
   }
 }
@@ -163,6 +167,7 @@ function getWindowComponent(name) {
     case 'Skills': return SkillsWindow;
     case 'Contact': return ContactWindow;
     case 'Resume': return ResumeWindow;
+    case 'Terminal': return TerminalWindow;
     default: return null;
   }
 }
