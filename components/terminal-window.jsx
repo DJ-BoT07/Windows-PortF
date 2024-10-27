@@ -1,0 +1,509 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { BaseWindow } from './base-window';
+import { Terminal } from 'lucide-react'; // Import the terminal icon
+import { useRouter } from "next/navigation";
+import Image from 'next/image';
+
+export function TerminalWindow({ onClose, onMinimize, onMaximize, isMaximized, zIndex, addWindow }) {
+  const [userInput, setUserInput] = useState("");
+  const [terminalOutput, setTerminalOutput] = useState([]);
+  const [currentDirectory, setCurrentDirectory] = useState("C:\\Users\\Guest");
+  const router = useRouter();
+
+  const BLACKLISTED_KEY_CODES = [38, 40, 37, 39, 18, 20, 17, 16, 9, 27, 144];
+
+  // Simulated file system
+  const fileSystem = {
+    "C:": {
+      "Users": {
+        "Guest": {
+          "Documents": {},
+          "Desktop": {},
+          "Downloads": {},
+        }
+      },
+      "Windows": {
+        "system32": {}
+      },
+      "Program Files": {}
+    }
+  };
+
+  const COMMANDS = {
+    help: (command) => {
+      if (command) {
+        const helpTexts = {
+          cd: `Changes the current directory.
+  
+  CD [drive:][path]
+  CD ..           - Move to parent directory
+  CD \\           - Display current directory
+  
+  Example: CD Documents`,
+        
+          dir: `Displays a list of files and subdirectories in a directory.
+  
+  DIR [drive:][path]
+  
+  Example: DIR C:\\Users`,
+        
+          cls: `Clears the screen.
+  
+  Usage: CLS`,
+        
+          echo: `Displays messages or turns command echoing on or off.
+  
+  ECHO [message]
+  
+  Example: ECHO Hello World`,
+        
+          exit: `Quits the Command Prompt.
+  
+  Usage: EXIT`,
+        
+          time: `Displays the system time.
+  
+  Usage: TIME`,
+        
+          date: `Displays the system date.
+  
+  Usage: DATE`,
+        
+          ver: `Displays the Windows version.
+  
+  Usage: VER`,
+        
+          vol: `Displays the disk volume label and serial number.
+  
+  Usage: VOL [drive:]`,
+
+          systeminfo: `Displays detailed information about your computer's hardware 
+and operating system configuration.
+  
+  Usage: SYSTEMINFO`,
+
+          tasklist: `Displays a list of currently running processes.
+  
+  Usage: TASKLIST`,
+
+          ipconfig: `Displays all current TCP/IP network configuration values.
+  
+  Usage: IPCONFIG`,
+
+          ping: `Tests network connection to a specified host.
+  
+  Usage: PING hostname
+  Example: PING google.com`,
+
+          tree: `Graphically displays the directory structure.
+  
+  Usage: TREE [drive:][path]`,
+
+          netstat: `Displays active network connections and ports.
+  
+  Usage: NETSTAT`,
+
+          hostname: `Displays the computer's host name.
+  
+  Usage: HOSTNAME`,
+
+          mkdir: `Creates a directory.
+  
+  Usage: MKDIR [drive:]path
+  Example: MKDIR newfolder`,
+
+          rmdir: `Removes (deletes) a directory.
+  
+  Usage: RMDIR [drive:]path
+  Example: RMDIR oldfolder`,
+
+          type: `Displays the contents of a text file.
+  
+  Usage: TYPE [drive:][path]filename
+  Example: TYPE readme.txt`,
+
+          projects: `Opens the My Projects window.
+  
+  Usage: PROJECTS`,
+
+          skills: `Opens the Skills window.
+  
+  Usage: SKILLS`,
+
+          contact: `Opens the Contact window.
+  
+  Usage: CONTACT`,
+
+          about: `Opens the About Me window.
+  
+  Usage: ABOUT`,
+
+          resume: `Opens the Resume window.
+  
+  Usage: RESUME`,
+        };
+
+        return helpTexts[command.toLowerCase()] || `No help available for '${command}'`;
+      }
+
+      // General help when no specific command is specified
+      return `Microsoft Windows XP [Version 5.1.2600]
+Help provides information about Windows commands.
+
+BASIC COMMANDS:
+  CD              Changes the current directory
+  CLS             Clears the screen
+  DIR             Lists files and directories
+  EXIT            Exits CMD.EXE
+  HELP            Shows help information
+  TIME            Shows/sets system time
+  DATE            Shows/sets system date
+  VER             Shows Windows version
+
+FILE COMMANDS:
+  MKDIR           Creates a directory
+  RMDIR           Removes a directory
+  TYPE            Displays file contents
+  TREE            Shows directory structure
+
+NETWORK COMMANDS:
+  IPCONFIG        Shows network configuration
+  PING            Tests network connection
+  NETSTAT         Shows network statistics
+  HOSTNAME        Shows computer name
+
+SYSTEM COMMANDS:
+  SYSTEMINFO      Shows system information
+  TASKLIST        Shows running processes
+  VOL             Shows disk information
+  ECHO            Displays messages
+
+PORTFOLIO COMMANDS:
+  PROJECTS        Opens My Projects window
+  SKILLS          Opens Skills window
+  CONTACT         Opens Contact window
+  ABOUT           Opens About Me window
+  RESUME          Opens Resume window
+
+For more information on a specific command, type:
+  HELP command-name
+
+Example: HELP CD`;
+    },
+
+    ver: () => "Microsoft Windows XP [Version 5.1.2600]",
+
+    dir: () => `
+ Volume in drive C has no label.
+ Volume Serial Number is 1234-5678
+
+ Directory of ${currentDirectory}
+
+12/25/2023  08:30 AM    <DIR>          .
+12/25/2023  08:30 AM    <DIR>          ..
+12/25/2023  08:30 AM    <DIR>          Documents
+12/25/2023  08:30 AM    <DIR>          Desktop
+12/25/2023  08:30 AM    <DIR>          Downloads
+               0 File(s)              0 bytes
+               5 Dir(s)  51,475,456,000 bytes free`,
+
+    cd: (args) => {
+      if (!args) return currentDirectory;
+      
+      let newPath = args === ".." 
+        ? currentDirectory.split("\\").slice(0, -1).join("\\")
+        : args.startsWith("C:\\") 
+          ? args 
+          : `${currentDirectory}\\${args}`;
+
+      // Validate path exists (simplified check)
+      if (newPath.startsWith("C:\\")) {
+        setCurrentDirectory(newPath);
+        return "";
+      }
+      return "The system cannot find the path specified.";
+    },
+
+    echo: (args) => args || "",
+    
+    time: () => new Date().toLocaleTimeString(),
+    
+    date: () => new Date().toLocaleDateString(),
+    
+    cls: () => {
+      setTerminalOutput([]);
+      return "";
+    },
+
+    color: () => "Changes console color (not implemented in this version)",
+
+    vol: () => `
+ Volume in drive C has no label.
+ Volume Serial Number is 1234-5678`,
+
+    exit: () => {
+      onClose();
+      return "";
+    },
+
+    mkdir: (args) => {
+      if (!args) return "The syntax of the command is incorrect.";
+      const dirName = args.trim();
+      return `Directory '${dirName}' created successfully.`;
+    },
+
+    rmdir: (args) => {
+      if (!args) return "The syntax of the command is incorrect.";
+      const dirName = args.trim();
+      return `Directory '${dirName}' removed successfully.`;
+    },
+
+    type: (args) => {
+      if (!args) return "The syntax of the command is incorrect.";
+      return "File not found.";
+    },
+
+    systeminfo: () => `
+Host Name:                 WINDOWS-XP
+OS Name:                   Microsoft Windows XP Professional
+OS Version:               5.1.2600
+OS Manufacturer:          Microsoft Corporation
+System Manufacturer:      PC Manufacturer
+System Type:              X86-based PC
+Processor:                x86 Family 6 Model 42 Stepping 7 GenuineIntel ~2800 Mhz
+BIOS Version:             AMI V1.23
+Windows Directory:        C:\\WINDOWS
+System Directory:         C:\\WINDOWS\\System32
+Boot Device:              \\Device\\HarddiskVolume1
+System Locale:            en-us
+Input Locale:             en-us
+Time Zone:                (GMT-08:00) Pacific Time (US & Canada)`,
+
+    tasklist: () => `
+Image Name                   PID    Session Name    Mem Usage
+========================= ======== ============== ============
+System Idle Process            0    Services           24 K
+System                         4    Services          256 K
+smss.exe                    368    Services          432 K
+csrss.exe                   592    Services          1,156 K
+winlogon.exe                616    Services          2,436 K
+services.exe                660    Services          3,488 K
+explorer.exe               1460    Console          12,560 K`,
+
+    ipconfig: () => `
+Windows IP Configuration
+
+Ethernet adapter Local Area Connection:
+   Connection-specific DNS Suffix  . : localdomain
+   IP Address. . . . . . . . . . . : 192.168.1.100
+   Subnet Mask . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . : 192.168.1.1`,
+
+    ping: (args) => {
+      if (!args) return "The syntax of the command is incorrect.";
+      return `
+Pinging ${args} with 32 bytes of data:
+Reply from ${args}: bytes=32 time=1ms TTL=128
+Reply from ${args}: bytes=32 time=1ms TTL=128
+Reply from ${args}: bytes=32 time=1ms TTL=128
+Reply from ${args}: bytes=32 time=1ms TTL=128
+
+Ping statistics for ${args}:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 1ms, Maximum = 1ms, Average = 1ms`;
+    },
+
+    tree: () => `
+Folder PATH listing
+C:\\
+├───Program Files
+├───Users
+│   └───Guest
+│       ├───Desktop
+│       ├───Documents
+│       └───Downloads
+└───Windows
+    └───System32`,
+
+    title: (args) => {
+      if (args) {
+        document.title = args;
+        return "";
+      }
+      return "The syntax of the command is incorrect.";
+    },
+
+    hostname: () => "WINDOWS-XP",
+
+    netstat: () => `
+Active Connections
+
+  Proto  Local Address          Foreign Address        State
+  TCP    127.0.0.1:1234        0.0.0.0:0             LISTENING
+  TCP    192.168.1.100:1234    192.168.1.1:445       ESTABLISHED`,
+
+    // Portfolio commands with different window positions
+    projects: () => {
+      if (addWindow) {
+        const position = { x: 100, y: 100 }; // Default position for Projects window
+        addWindow('My Projects', getIconForName('My Projects'), position);
+        return "Opening My Projects window...";
+      }
+      return "Error: Cannot open window";
+    },
+
+    skills: () => {
+      if (addWindow) {
+        const position = { x: 150, y: 150 }; // Offset position for Skills window
+        addWindow('Skills', getIconForName('Skills'), position);
+        return "Opening Skills window...";
+      }
+      return "Error: Cannot open window";
+    },
+
+    contact: () => {
+      if (addWindow) {
+        const position = { x: 200, y: 200 }; // Offset position for Contact window
+        addWindow('Contact', getIconForName('Contact'), position);
+        return "Opening Contact window...";
+      }
+      return "Error: Cannot open window";
+    },
+
+    about: () => {
+      if (addWindow) {
+        const position = { x: 250, y: 250 }; // Offset position for About window
+        addWindow('About Me', getIconForName('About Me'), position);
+        return "Opening About Me window...";
+      }
+      return "Error: Cannot open window";
+    },
+
+    resume: () => {
+      if (addWindow) {
+        const position = { x: 300, y: 300 }; // Offset position for Resume window
+        addWindow('Resume', getIconForName('Resume'), position);
+        return "Opening Resume window...";
+      }
+      return "Error: Cannot open window";
+    },
+  };
+
+  // Add this helper function at the top level of the file
+  function getIconForName(name) {
+    switch (name) {
+      case 'My Projects': 
+        return <Image src="https://icons.iconarchive.com/icons/icons-land/vista-hardware-devices/128/Computer-icon.png" alt="My Projects" width={55} height={55} />;
+      case 'About Me': 
+        return <Image src="https://icons.iconarchive.com/icons/chrisbanks2/gCons/128/WhatsApp-icon.png" alt="About Me" width={55} height={55} />;
+      case 'Skills': 
+        return <Image src="https://icons.iconarchive.com/icons/limpa/curriculum-vitae/128/language-skills-icon.png" alt="Skills" width={55} height={55} />;
+      case 'Contact': 
+        return <Image src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/128/Gmail-icon.png" alt="Contact" width={55} height={55} />;
+      case 'Resume': 
+        return <Image src="https://icons.iconarchive.com/icons/untergunter/leaf-mimes/128/text-x-bak-icon.png" alt="Resume" width={55} height={55} />;
+      default: 
+        return '📁';
+    }
+  }
+
+  useEffect(() => {
+    setTerminalOutput([
+      `Microsoft Windows XP [Version 5.1.2600]`,
+      `(C) Copyright 1985-2001 Microsoft Corp.`,
+      ``,
+    ]);
+  }, []);
+
+  const executeCommand = (input) => {
+    if (!input) return;
+
+    // Add command to output with proper formatting
+    setTerminalOutput(prev => [...prev, `${currentDirectory}>${input}`]);
+
+    // Parse command and arguments
+    const [cmd, ...args] = input.trim().toLowerCase().split(" ");
+    const argsString = args.join(" ");
+
+    if (!COMMANDS.hasOwnProperty(cmd)) {
+      setTerminalOutput(prev => [...prev, 
+        `'${cmd}' is not recognized as an internal or external command,`,
+        `operable program or batch file.`
+      ]);
+      return;
+    }
+
+    // Execute command
+    const output = COMMANDS[cmd](argsString);
+    if (output) {
+      setTerminalOutput(prev => [...prev, output]);
+    }
+  };
+
+  const handleKey = (event) => {
+    if (BLACKLISTED_KEY_CODES.includes(event.keyCode)) return;
+    event.preventDefault();
+
+    const currentKey = event.key;
+    if (currentKey === "Enter") {
+      executeCommand(userInput.trim());
+      setUserInput("");
+    } else if (currentKey === "Backspace") {
+      setUserInput((prev) => prev.slice(0, -1));
+    } else {
+      setUserInput((prev) => prev + currentKey);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [userInput]);
+
+  return (
+    <BaseWindow
+      title="Command Prompt"
+      onClose={onClose}
+      onMinimize={onMinimize}
+      onMaximize={onMaximize}
+      isMaximized={isMaximized}
+      zIndex={zIndex}
+    >
+      <div className="flex flex-col h-full">
+        <div 
+          className="flex-1 p-1 bg-black text-white font-[Consolas,monaco] text-sm overflow-auto whitespace-pre-wrap"
+          style={{
+            fontFamily: "'Lucida Console', Monaco, monospace",
+          }}
+        >
+          {terminalOutput.map((line, i) => (
+            <div key={i} className="terminal-line">{line}</div>
+          ))}
+          <div className="flex">
+            <span className="text-white">{currentDirectory}&gt;</span>
+            <span
+              id="userInput"
+              className="ml-1 relative"
+            >
+              {userInput}
+              <span className="absolute inset-y-0 right-0 w-2 bg-white animate-pulse"></span>
+            </span>
+          </div>
+          <input
+            type="text"
+            id="Keyboard"
+            className="opacity-0 absolute"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            autoFocus
+          />
+        </div>
+      </div>
+    </BaseWindow>
+  );
+}

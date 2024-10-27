@@ -6,6 +6,7 @@ import { Taskbar } from './taskbar'
 import { StartMenu } from './start-menu'
 import { DesktopContextMenu } from './desktop-context-menu'
 import { SkillsWindow } from './skills-window'
+import { TerminalWindow } from './terminal-window'
 
 export function WindowsXpDesktop() {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
@@ -17,7 +18,8 @@ export function WindowsXpDesktop() {
     'About Me': { x: 20, y: 100 },
     'Skills': { x: 20, y: 180 },
     'Contact': { x: 20, y: 260 },
-    'Resume': { x: 20, y: 340 }
+    'Resume': { x: 20, y: 340 },
+    'Terminal': { x: 20, y: 420 } // Add the Terminal icon position
   })
   const [isClient, setIsClient] = useState(false)
 
@@ -29,12 +31,19 @@ export function WindowsXpDesktop() {
     setIsStartMenuOpen(!isStartMenuOpen)
   }
 
-  const addWindow = (windowName, icon) => {
+  const addWindow = (windowName, icon, position = { x: 100, y: 100 }) => {
     if (!windows.find(w => w.name === windowName)) {
-      setWindows([...windows, { name: windowName, icon, isMinimized: false, isMaximized: false, zIndex: nextZIndex }])
-      setNextZIndex(nextZIndex + 1)
+      setWindows([...windows, { 
+        name: windowName, 
+        icon, 
+        position,
+        isMinimized: false, 
+        isMaximized: false, 
+        zIndex: nextZIndex 
+      }]);
+      setNextZIndex(nextZIndex + 1);
     }
-  }
+  };
 
   const removeWindow = (windowName) => {
     setWindows(windows.filter(w => w.name !== windowName))
@@ -77,6 +86,62 @@ export function WindowsXpDesktop() {
     }))
   }
 
+  const getWindowComponent = (window) => {
+    switch (window.name) {
+      case 'My Projects':
+        return <MyProjectsWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'About Me':
+        return <AboutMeWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'Skills':
+        return <SkillsWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'Contact':
+        return <ContactWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'Resume':
+        return <ResumeWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+        />;
+      case 'Terminal':
+        return <TerminalWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
+          addWindow={addWindow}
+        />;
+      default:
+        return null;
+    }
+  };
+
   if (!isClient) {
     return null; // or a loading spinner
   }
@@ -104,7 +169,7 @@ export function WindowsXpDesktop() {
       />
       {isStartMenuOpen && (
         <div className="absolute bottom-12 left-0 z-50">
-          <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} />
+          <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} addWindow={addWindow} />
         </div>
       )}
       {contextMenuPosition && (
@@ -119,6 +184,13 @@ export function WindowsXpDesktop() {
         windows={windows}
         focusWindow={focusWindow}
       />
+      {windows.map(window => (
+        !window.isMinimized && (
+          <div key={window.name} style={{ zIndex: window.zIndex }}>
+            {getWindowComponent(window)}
+          </div>
+        )
+      ))}
     </div>
   );
 }

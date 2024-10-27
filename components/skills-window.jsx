@@ -30,7 +30,7 @@ export function SkillsWindow({ onClose, onMinimize, onMaximize, isMaximized, zIn
           Technologies (June 2023– May 2024)
         </h2>
         <div className="grid grid-cols-2 gap-4">
-          <SkillCategory 
+          <SkillCategory                             
             title="Languages" 
             
             icon={<span role="img" aria-label="code">👨‍💻</span>}
