@@ -1,14 +1,11 @@
 import React, { useState } from 'react'
- // Ensure the file name matches
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function StartMenu({ closeStartMenu, addWindow }) {
   const [activeSubmenu, setActiveSubmenu] = useState(null);
 
   const openBrowser = () => {
-    // Open Google in a new tab/window
     window.open('https://www.google.com', '_blank', 'noopener,noreferrer');
-    
-    // Close the start menu after opening the link
     closeStartMenu();
   };
 
@@ -51,7 +48,18 @@ export function StartMenu({ closeStartMenu, addWindow }) {
   };
 
   return (
-    <div className="absolute left-0 bottom-0 w-80 bg-[#4282d6] border-2 border-[#3169c6] shadow-lg rounded-tr-lg overflow-hidden">
+    <motion.div 
+      className="absolute left-0 bottom-0 w-80 bg-[#4282d6] border-2 border-[#3169c6] shadow-lg rounded-tr-lg overflow-hidden origin-bottom"
+      initial={{ opacity: 0, y: "100%" }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: "100%" }}
+      transition={{ 
+        type: "spring",
+        stiffness: 500,
+        damping: 30,
+        mass: 0.8
+      }}
+    >
       <div className="h-16 bg-gradient-to-b from-[#1c3e8b] to-[#3165ca] flex items-center px-4">
         <div className="w-12 h-12 rounded-full bg-[#3066bf] mr-4 flex items-center justify-center text-white font-bold text-2xl">
           U
@@ -115,9 +123,10 @@ export function StartMenu({ closeStartMenu, addWindow }) {
         <input 
           type="text" 
           placeholder="Search programs"
+          className="px-2 py-1 rounded text-sm w-full"
         />
       </div>
-    </div>
+    </motion.div>
   )
 }
 

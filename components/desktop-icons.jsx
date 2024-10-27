@@ -8,6 +8,7 @@ import { TerminalWindow } from './terminal-window' // Import the TerminalWindow
 import { IconContextMenu } from './icon-context-menu'
 import Image from 'next/image'; // Add this import
 import { Terminal } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMaximize, focusWindow, windows, iconPositions, updateIconPosition }) {
   const [selectedIcon, setSelectedIcon] = useState(null)
@@ -94,22 +95,6 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
           />
         ))}
       </div>
-      {windows.map(window => {
-        const WindowComponent = getWindowComponent(window.name);
-        return (
-          WindowComponent && !window.isMinimized && (
-            <WindowComponent 
-              key={window.name}
-              onClose={() => removeWindow(window.name)}
-              onMinimize={() => toggleMinimize(window.name)}
-              onMaximize={() => toggleMaximize(window.name)}
-              isMaximized={window.isMaximized}
-              zIndex={window.zIndex}
-              addWindow={addWindow}
-            />
-          )
-        );
-      })}
       {contextMenuPosition && (
         <IconContextMenu 
           x={contextMenuPosition.x} 
@@ -125,13 +110,17 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
 
 function DesktopIcon({ name, icon, isSelected, position, onClick, onDoubleClick, onContextMenu, onMouseDown }) {
   return (
-    <div 
+    <motion.div 
       className={`absolute flex flex-col items-center w-20 cursor-pointer group ${isSelected ? 'bg-blue-500 bg-opacity-50' : ''}`} 
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu}
       onMouseDown={onMouseDown}
+      whileTap={{ scale: 0.95 }}
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
       <div className="mb-1 relative">
         <div className="text-4xl w-12 h-12 flex items-center justify-center">{icon}</div>
@@ -140,7 +129,7 @@ function DesktopIcon({ name, icon, isSelected, position, onClick, onDoubleClick,
       <div className={`text-center text-white text-shadow px-1 py-0.5 ${isSelected ? 'bg-blue-700 bg-opacity-70' : 'bg-transparent group-hover:bg-blue-700 group-hover:bg-opacity-70'}`}>
         <span className="text-xs leading-tight">{name}</span>
       </div>
-    </div>
+    </motion.div>
   )
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Minus, Square } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function BaseWindow({ children, title, onClose, onMinimize, onMaximize, isMaximized, zIndex }) {
   const [position, setPosition] = useState({ x: 100, y: 100 });
@@ -24,38 +25,49 @@ export function BaseWindow({ children, title, onClose, onMinimize, onMaximize, i
     setIsDragging(false);
     setIsResizing(false);
     setResizeDirection('');
-  }, []); // No dependencies needed
+  }, []);
 
   const drag = useCallback((e) => {
     if (isDragging) {
-      setPosition({
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y
+      requestAnimationFrame(() => {
+        const newX = e.clientX - dragOffset.x;
+        const newY = e.clientY - dragOffset.y;
+        
+        // Ensure the window stays within viewport bounds
+        const maxX = window.innerWidth - size.width;
+        const maxY = window.innerHeight - size.height;
+        
+        setPosition({
+          x: Math.max(0, Math.min(newX, maxX)),
+          y: Math.max(0, Math.min(newY, maxY))
+        });
       });
     }
     if (isResizing) {
-      const newSize = { ...size };
-      const newPosition = { ...position };
+      requestAnimationFrame(() => {
+        const newSize = { ...size };
+        const newPosition = { ...position };
 
-      if (resizeDirection.includes('w')) {
-        const dx = e.clientX - position.x;
-        newSize.width = Math.max(200, size.width - dx);
-        newPosition.x = e.clientX;
-      }
-      if (resizeDirection.includes('n')) {
-        const dy = e.clientY - position.y;
-        newSize.height = Math.max(100, size.height - dy);
-        newPosition.y = e.clientY;
-      }
-      if (resizeDirection.includes('e')) {
-        newSize.width = Math.max(200, e.clientX - position.x);
-      }
-      if (resizeDirection.includes('s')) {
-        newSize.height = Math.max(100, e.clientY - position.y);
-      }
+        if (resizeDirection.includes('w')) {
+          const dx = e.clientX - position.x;
+          newSize.width = Math.max(200, size.width - dx);
+          newPosition.x = e.clientX;
+        }
+        if (resizeDirection.includes('n')) {
+          const dy = e.clientY - position.y;
+          newSize.height = Math.max(100, size.height - dy);
+          newPosition.y = e.clientY;
+        }
+        if (resizeDirection.includes('e')) {
+          newSize.width = Math.max(200, e.clientX - position.x);
+        }
+        if (resizeDirection.includes('s')) {
+          newSize.height = Math.max(100, e.clientY - position.y);
+        }
 
-      setSize(newSize);
-      setPosition(newPosition);
+        setSize(newSize);
+        setPosition(newPosition);
+      });
     }
   }, [isDragging, isResizing, dragOffset, size, position, resizeDirection]);
 
@@ -73,7 +85,7 @@ export function BaseWindow({ children, title, onClose, onMinimize, onMaximize, i
       document.removeEventListener('mousemove', drag);
       document.removeEventListener('mouseup', stopDragging);
     };
-  }, [drag, stopDragging]); // Updated dependencies
+  }, [drag, stopDragging]);
 
   const windowStyle = isMaximized
     ? { left: 0, top: 0, width: '100%', height: 'calc(100% - 40px)', zIndex }
@@ -86,13 +98,29 @@ export function BaseWindow({ children, title, onClose, onMinimize, onMaximize, i
       };
 
   return (
-    <div
+    <motion.div
       ref={windowRef}
       className="absolute bg-[#F0F0F0] border-2 border-[#00008B] shadow-md rounded-t-lg overflow-hidden flex flex-col"
       style={windowStyle}
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.8, opacity: 0 }}
+      transition={{ 
+        type: "spring",
+        stiffness: 800,
+        damping: 35,
+        mass: 0.5
+      }}
+      layoutTransition={{
+        type: "spring",
+        stiffness: 800,
+        damping: 35,
+        mass: 0.5
+      }}
+      layout
     >
       <div
-        className="h-8 bg-gradient-to-r from-[#00008B] via-[#1E90FF] to-[#87CEFA] flex items-center justify-between px-2 cursor-move"
+        className="h-8 bg-gradient-to-r from-[#00008B] via-[#1E90FF] to-[#87CEFA] flex items-center justify-between px-2 cursor-move select-none"
         onMouseDown={startDragging}
       >
         <span className="text-white font-bold">{title}</span>
@@ -123,6 +151,6 @@ export function BaseWindow({ children, title, onClose, onMinimize, onMaximize, i
           <div className="absolute bottom-0 right-0 w-2 h-2 cursor-se-resize" onMouseDown={() => startResizing('se')}></div>
         </>
       )}
-    </div>
+    </motion.div>
   );
 }

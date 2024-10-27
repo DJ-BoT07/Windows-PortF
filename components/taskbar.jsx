@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Clock, Clock1, Volume, Volume1Icon, Wifi } from "lucide-react"
 import Image from 'next/image'; // Add this import
+import { motion } from 'framer-motion';
 
 export function Taskbar({ toggleStartMenu, windows, focusWindow }) {
   return (
@@ -37,17 +38,23 @@ export function Taskbar({ toggleStartMenu, windows, focusWindow }) {
 
 function TaskbarButton({ name, icon, isActive, onClick }) {
   return (
-    <Button
+    <motion.button
       variant="ghost"
       className={`h-10 px-2 min-w-[120px] max-w-[200px] rounded-none ${
         isActive ? 'bg-[#74b2ff]' : 'bg-gradient-to-r from-[#3a6ee8] to-[#245edb]'
       } text-white font-bold hover:bg-[#74b2ff] hover:text-white focus:bg-[#74b2ff] focus:text-white shadow-inner flex items-center justify-start overflow-hidden`}
       onClick={onClick}
+      whileHover={{ scale: 1 }}
+      whileTap={{ scale: 0.95 }}
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
       <span className="text-2xl mr-2 flex items-center justify-center w-10 h-10">{icon}</span>
       <span className="truncate">{name}</span>
-    </Button>
-  )
+    </motion.button>
+  );
 }
 
 function SystemTray() {

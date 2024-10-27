@@ -11,6 +11,7 @@ import { MyProjectsWindow } from './my-projects-window'
 import { AboutMeWindow } from './about-me-window'
 import { ContactWindow } from './contact-window'
 import { ResumeWindow } from './resume-window'
+import { AnimatePresence } from 'framer-motion'
 
 export function WindowsXpDesktop() {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
@@ -171,11 +172,13 @@ export function WindowsXpDesktop() {
         iconPositions={iconPositions}
         updateIconPosition={updateIconPosition}
       />
-      {isStartMenuOpen && (
-        <div className="absolute bottom-12 left-0 z-50">
-          <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} addWindow={addWindow} />
-        </div>
-      )}
+      <AnimatePresence>
+        {isStartMenuOpen && (
+          <div className="absolute bottom-12 left-0 z-50">
+            <StartMenu closeStartMenu={() => setIsStartMenuOpen(false)} addWindow={addWindow} />
+          </div>
+        )}
+      </AnimatePresence>
       {contextMenuPosition && (
         <DesktopContextMenu 
           x={contextMenuPosition.x} 
@@ -188,13 +191,15 @@ export function WindowsXpDesktop() {
         windows={windows}
         focusWindow={focusWindow}
       />
-      {windows.map(window => (
-        !window.isMinimized && (
-          <div key={window.name} style={{ zIndex: window.zIndex }}>
-            {getWindowComponent(window)}
-          </div>
-        )
-      ))}
+      <AnimatePresence>
+        {windows.map(window => (
+          !window.isMinimized && (
+            <div key={window.name} style={{ zIndex: window.zIndex }}>
+              {getWindowComponent(window)}
+            </div>
+          )
+        ))}
+      </AnimatePresence>
     </div>
   );
 }
