@@ -34,12 +34,12 @@ export function StartupScreen({ onStartupComplete }) {
         </motion.div>
 
         {/* Classic XP Loading Bar */}
-        <div className="w-[280px] h-[22px] bg-[#000033] border border-[#000066] relative overflow-hidden">
+        <div className="w-[280px] h-[22px] bg-[#000033] border border-[#000066] relative overflow-hidden rounded-lg">
           {/* Loading Bar Segments */}
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute h-full w-[90px] bg-gradient-to-r from-[#0066CC] via-[#1E90FF] to-[#0066CC]"
+              className="absolute h-full w-[90px] bg-gradient-to-r from-[#0066CC] via-[#1E90FF] to-[#0066CC] rounded-md"
               initial={{ x: -90 }}
               animate={{ x: 280 }}
               transition={{

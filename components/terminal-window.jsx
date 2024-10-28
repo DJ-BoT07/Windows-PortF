@@ -15,6 +15,23 @@ export function TerminalWindow({ onClose, onMinimize, onMaximize, isMaximized, z
   const [currentDirectory, setCurrentDirectory] = useState("C:\\Users\\Guest");
   const router = useRouter();
 
+  // First, add this state near the top of the component
+  const [fileSystem, setFileSystem] = useState({
+    'C:': {
+      'Program Files': {},
+      'Users': {
+        'Guest': {
+          'Desktop': {},
+          'Documents': {},
+          'Downloads': {}
+        }
+      },
+      'Windows': {
+        'System32': {}
+      }
+    }
+  });
+
   // Move COMMANDS inside useMemo to prevent recreation on every render
   const COMMANDS = useMemo(() => ({
     help: (command) => {
@@ -180,35 +197,63 @@ Example: HELP CD`;
 
     ver: () => "Microsoft Windows XP [Version 5.1.2600]",
 
-    dir: () => `
+    dir: () => {
+      // Get current directory contents
+      const pathArray = currentDirectory.split('\\').filter(Boolean);
+      let currentNode = fileSystem['C:']; // Start from C: drive
+      
+      // Navigate to current directory
+      for (let i = 1; i < pathArray.length; i++) {
+        const dir = pathArray[i];
+        if (!currentNode[dir]) {
+          return "The system cannot find the path specified.";
+        }
+        currentNode = currentNode[dir];
+      }
+      
+      const contents = Object.keys(currentNode);
+      
+      return `
  Volume in drive C has no label.
  Volume Serial Number is 1234-5678
 
  Directory of ${currentDirectory}
 
-12/25/2023  08:30 AM    <DIR>          .
-12/25/2023  08:30 AM    <DIR>          ..
-12/25/2023  08:30 AM    <DIR>          Documents
-12/25/2023  08:30 AM    <DIR>          Desktop
-12/25/2023  08:30 AM    <DIR>          Downloads
+${new Date().toLocaleDateString()}  08:30 AM    <DIR>          .
+${new Date().toLocaleDateString()}  08:30 AM    <DIR>          ..
+${contents.map(name => 
+  `${new Date().toLocaleDateString()}  08:30 AM    <DIR>          ${name}`
+).join('\n')}
                0 File(s)              0 bytes
-               5 Dir(s)  51,475,456,000 bytes free`,
+               ${contents.length + 2} Dir(s)  51,475,456,000 bytes free`;
+    },
 
     cd: (args) => {
       if (!args) return currentDirectory;
       
-      let newPath = args === ".." 
-        ? currentDirectory.split("\\").slice(0, -1).join("\\")
-        : args.startsWith("C:\\") 
-          ? args 
-          : `${currentDirectory}\\${args}`;
-
-      // Validate path exists (simplified check)
-      if (newPath.startsWith("C:\\")) {
-        setCurrentDirectory(newPath);
-        return "";
+      let newPath;
+      if (args === "..") {
+        newPath = currentDirectory.split("\\").slice(0, -1).join("\\");
+      } else if (args.startsWith("C:\\")) {
+        newPath = args;
+      } else {
+        newPath = `${currentDirectory}\\${args}`;
       }
-      return "The system cannot find the path specified.";
+      
+      // Validate path exists in fileSystem
+      const pathArray = newPath.split('\\').filter(Boolean); // Remove empty strings
+      let currentNode = fileSystem['C:'];  // Start from C: drive
+      
+      for (let i = 1; i < pathArray.length; i++) { // Start from 1 to skip 'C:'
+        const dir = pathArray[i];
+        if (!currentNode[dir]) {
+          return "The system cannot find the path specified.";
+        }
+        currentNode = currentNode[dir];
+      }
+      
+      setCurrentDirectory(newPath);
+      return "";
     },
 
     echo: (args) => args || "",
@@ -236,13 +281,79 @@ Example: HELP CD`;
     mkdir: (args) => {
       if (!args) return "The syntax of the command is incorrect.";
       const dirName = args.trim();
+      
+      // Get current path as array
+      const pathArray = currentDirectory.split('\\').filter(Boolean); // Remove empty strings
+      let currentNode = fileSystem['C:']; // Start from C: drive
+      
+      // Navigate to current directory in fileSystem
+      for (let i = 1; i < pathArray.length; i++) { // Start from 1 to skip 'C:'
+        const dir = pathArray[i];
+        if (!currentNode[dir]) {
+          return "The system cannot find the path specified.";
+        }
+        currentNode = currentNode[dir];
+      }
+      
+      // Check if directory already exists
+      if (currentNode[dirName]) {
+        return `A subdirectory or file ${dirName} already exists.`;
+      }
+      
+      // Create new directory
+      setFileSystem(prev => {
+        const newFS = JSON.parse(JSON.stringify(prev));
+        let node = newFS['C:']; // Start from C: drive
+        for (let i = 1; i < pathArray.length; i++) {
+          node = node[pathArray[i]];
+        }
+        node[dirName] = {};
+        return newFS;
+      });
+      
       return `Directory '${dirName}' created successfully.`;
     },
 
     rmdir: (args) => {
       if (!args) return "The syntax of the command is incorrect.";
       const dirName = args.trim();
-      return `Directory '${dirName}' removed successfully.`;
+      
+      // Get current path as array and remove empty strings
+      const pathArray = currentDirectory.split('\\').filter(Boolean);
+      let currentNode = fileSystem['C:']; // Start from C: drive
+      
+      // Navigate to current directory in fileSystem
+      for (let i = 1; i < pathArray.length; i++) {
+        const dir = pathArray[i];
+        if (!currentNode[dir]) {
+          console.log('Navigation failed at:', dir); // Debug log
+          return "The system cannot find the path specified.";
+        }
+        currentNode = currentNode[dir];
+      }
+      
+      // Check if directory exists in current location
+      if (!currentNode[dirName]) {
+        console.log('Directory not found:', dirName, 'in', currentNode); // Debug log
+        return `The system cannot find the directory specified: ${dirName}`;
+      }
+      
+      // Remove directory
+      setFileSystem(prev => {
+        const newFS = JSON.parse(JSON.stringify(prev));
+        let node = newFS['C:']; // Start from C: drive
+        
+        // Navigate to the current directory
+        for (let i = 1; i < pathArray.length; i++) {
+          node = node[pathArray[i]];
+        }
+        
+        // Delete the directory
+        delete node[dirName];
+        return newFS;
+      });
+      
+      return `Directory '${dirName}' was successfully removed.`;
     },
 
     type: (args) => {
@@ -301,17 +412,24 @@ Approximate round trip times in milli-seconds:
     Minimum = 1ms, Maximum = 1ms, Average = 1ms`;
     },
 
-    tree: () => `
-Folder PATH listing
-C:\\
-├───Program Files
-├───Users
-│   └───Guest
-│       ├───Desktop
-│       ├───Documents
-│       └───Downloads
-└───Windows
-    └───System32`,
+    tree: () => {
+      const buildTree = (obj, prefix = '') => {
+        let result = '';
+        const entries = Object.entries(obj);
+        entries.forEach(([key, value], index) => {
+          const isLast = index === entries.length - 1;
+          const connector = isLast ? '└───' : '├───';
+          result += `${prefix}${connector}${key}\n`;
+          if (Object.keys(value).length > 0) {
+            const newPrefix = prefix + (isLast ? '    ' : '│   ');
+            result += buildTree(value, newPrefix);
+          }
+        });
+        return result;
+      };
+
+      return `Folder PATH listing\n${buildTree(fileSystem)}`;
+    },
 
     title: (args) => {
       if (args) {
@@ -375,7 +493,16 @@ Active Connections
       }
       return "Error: Cannot open window";
     },
-  }), [addWindow, currentDirectory, onClose]); // Add dependencies that are used inside commands
+
+    // Add this debug command to help us see the file system structure
+    debug: () => {
+      console.log('Current Directory:', currentDirectory);
+      console.log('Current Path Array:', currentDirectory.split('\\').filter(Boolean));
+      console.log('File System State:', JSON.stringify(fileSystem, null, 2));
+      return `Current Directory: ${currentDirectory}
+File System State: ${JSON.stringify(fileSystem, null, 2)}`;
+    },
+  }), [addWindow, currentDirectory, onClose, fileSystem]); // Added fileSystem to dependencies
 
   // Move executeCommand inside useCallback with proper dependencies
   const executeCommand = useCallback((input) => {
