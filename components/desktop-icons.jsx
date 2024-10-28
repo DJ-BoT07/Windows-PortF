@@ -10,7 +10,7 @@ import Image from 'next/image'; // Add this import
 import { Terminal } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMaximize, focusWindow, windows, iconPositions, updateIconPosition }) {
+export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMaximize, focusWindow, windows, iconPositions, updateIconPosition, iconView }) {
   const [selectedIcon, setSelectedIcon] = useState(null)
   const [contextMenuPosition, setContextMenuPosition] = useState(null)
   const [draggingIcon, setDraggingIcon] = useState(null)
@@ -92,6 +92,7 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
             onDoubleClick={() => handleIconDoubleClick(name, getIconForName(name))}
             onContextMenu={(e) => handleIconContextMenu(e, name)}
             onMouseDown={(e) => startDragging(e, name)}
+            iconView={iconView} // Pass the iconView prop
           />
         ))}
       </div>
@@ -108,27 +109,51 @@ export function DesktopIcons({ addWindow, removeWindow, toggleMinimize, toggleMa
   )
 }
 
-function DesktopIcon({ name, icon, isSelected, position, onClick, onDoubleClick, onContextMenu, onMouseDown }) {
+function DesktopIcon({ name, icon, isSelected, position, onClick, onDoubleClick, onContextMenu, onMouseDown, iconView }) {
+  const viewStyles = {
+    large: {
+      container: 'w-28',
+      icon: 'text-5xl w-20 h-20',
+      text: 'text-sm'
+    },
+    medium: {
+      container: 'w-20',
+      icon: 'text-4xl w-12 h-12',
+      text: 'text-xs'
+    },
+    small: {
+      container: 'w-16',
+      icon: 'text-3xl w-10 h-10',
+      text: 'text-xs'
+    },
+    list: {
+      container: 'w-full h-10 flex items-center px-2',
+      icon: 'text-2xl w-8 h-8',
+      text: 'text-sm ml-2'
+    }
+  };
+
+  const style = viewStyles[iconView] || viewStyles.medium;
+
   return (
     <motion.div 
-      className={`absolute flex flex-col items-center w-20 cursor-pointer group ${isSelected ? 'bg-blue-500 bg-opacity-50' : ''}`} 
+      className={`absolute flex ${iconView === 'list' ? 'flex-row' : 'flex-col'} items-center ${style.container} cursor-pointer group ${isSelected ? 'bg-blue-500 bg-opacity-50' : ''}`}
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu}
       onMouseDown={onMouseDown}
       whileTap={{ scale: 0.95 }}
-      // Removed initial and animate properties to prevent startup animation
     >
-      <div className="mb-1 relative">
-        <div className="text-4xl w-12 h-12 flex items-center justify-center">{icon}</div>
+      <div className={`${iconView !== 'list' && 'mb-1'} relative`}>
+        <div className={`${style.icon} flex items-center justify-center`}>{icon}</div>
         <div className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-20"></div>
       </div>
-      <div className={`text-center text-white text-shadow px-1 py-0.5 ${isSelected ? 'bg-blue-700 bg-opacity-70' : 'bg-transparent group-hover:bg-blue-700 group-hover:bg-opacity-70'}`}>
-        <span className="text-xs leading-tight">{name}</span>
+      <div className={`text-center text-white text-shadow px-1 py-0.5 ${style.text} ${isSelected ? 'bg-blue-700 bg-opacity-70' : 'bg-transparent group-hover:bg-blue-700 group-hover:bg-opacity-70'}`}>
+        <span className="leading-tight">{name}</span>
       </div>
     </motion.div>
-  )
+  );
 }
 
 function getIconForName(name) {

@@ -29,6 +29,8 @@ export function WindowsXpDesktop() {
     'Resume': { x: 20, y: 340 },
     'Terminal': { x: 20, y: 420 }
   })
+  const [iconView, setIconView] = useState('medium'); // 'large', 'medium', 'small', 'list'
+  const [iconSort, setIconSort] = useState('name'); // 'name', 'type', 'date'
 
   useEffect(() => {
     setIsClient(true)
@@ -153,6 +155,51 @@ export function WindowsXpDesktop() {
     }
   }
 
+  const getIconContainerStyle = () => {
+    switch (iconView) {
+      case 'large':
+        return 'grid grid-cols-4 gap-8';
+      case 'medium':
+        return 'grid grid-cols-6 gap-6';
+      case 'small':
+        return 'grid grid-cols-8 gap-4';
+      case 'list':
+        return 'flex flex-col gap-2';
+      default:
+        return 'grid grid-cols-6 gap-6';
+    }
+  };
+
+  const getSortedIcons = () => {
+    const icons = [...Object.entries(iconPositions)];
+    switch (iconSort) {
+      case 'name':
+        return icons.sort((a, b) => a[0].localeCompare(b[0]));
+      case 'type':
+        // You can implement custom type sorting logic here
+        return icons;
+      case 'date':
+        // You can implement date sorting logic here
+        return icons;
+      default:
+        return icons;
+    }
+  };
+
+  const iconSizes = {
+    large: 'w-32 h-32',
+    medium: 'w-20 h-20',
+    small: 'w-16 h-16',
+    list: 'w-full h-12 flex items-center px-2',
+  };
+
+  const iconTextSizes = {
+    large: 'text-lg',
+    medium: 'text-sm',
+    small: 'text-xs',
+    list: 'text-sm ml-2',
+  };
+
   if (!isClient) {
     return null
   }
@@ -181,6 +228,12 @@ export function WindowsXpDesktop() {
           windows={windows}
           iconPositions={iconPositions}
           updateIconPosition={updateIconPosition}
+          iconView={iconView}
+          iconSort={iconSort}
+          getIconContainerStyle={getIconContainerStyle}
+          getSortedIcons={getSortedIcons}
+          iconSizes={iconSizes}
+          iconTextSizes={iconTextSizes}
         />
         <AnimatePresence>
           {isStartMenuOpen && (
@@ -194,6 +247,10 @@ export function WindowsXpDesktop() {
             x={contextMenuPosition.x} 
             y={contextMenuPosition.y} 
             onClose={closeContextMenu}
+            onViewChange={setIconView}
+            currentView={iconView}
+            onSortChange={setIconSort}
+            currentSort={iconSort}
           />
         )}
         <Taskbar 
