@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
-import { Clock, Clock1, Volume, Volume1Icon, Wifi } from "lucide-react"
+import {Volume1Icon, Wifi,Battery } from "lucide-react"
+import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import Image from 'next/image'; // Add this import
 import { motion } from 'framer-motion';
+import { format } from "date-fns";
 
 // Add this new component for the animated Start button
 function AnimatedStartButton({ onClick }) {
@@ -91,6 +98,7 @@ function TaskbarButton({ name, icon, isActive, onClick }) {
 
 function SystemTray() {
   const [time, setTime] = useState(getFormattedTime());
+  const [date, setDate] = useState(new Date())
 
   useEffect(() => {
     const timer = setInterval(() => setTime(getFormattedTime()), 1000);
@@ -106,11 +114,24 @@ function SystemTray() {
       <div className="flex space-x-2 items-center hover:border border-border p-2 rounded transition-all" >
         <Volume1Icon className="w-5 h-5 hover:scale-110" />
         <Wifi className="w-5 h-5 hover:scale-110" />
-        <Clock1 className="w-4 h-4 hover:scale-110" />
+        <Battery className="w-5 h-5 hover:scale-110" />
       </div>
-      <div className="flex items-center hover:border border-border p-2 py-[0.35rem] rounded transition-all">
-        {time}
-      </div>
+      <Popover>
+        <PopoverTrigger>
+          <div className="flex items-center hover:border border-border p-2 py-[0.35rem] rounded transition-all cursor-pointer">
+            {time}
+          </div>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0 bg-white" align="end">
+          <CalendarComponent
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            initialFocus
+            className="rounded-md border bg-white"
+          />
+        </PopoverContent>
+      </Popover>
     </div>
   )
 }
