@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { BaseWindow } from './base-window';
 import { Terminal } from 'lucide-react'; // Import the terminal icon
 import { useRouter } from "next/navigation";
@@ -558,6 +558,16 @@ File System State: ${JSON.stringify(fileSystem, null, 2)}`;
     ]);
   }, []);
 
+  // Add this ref for the terminal output container
+  const terminalRef = useRef(null);
+
+  // Add this useEffect to handle auto-scrolling
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+  }, [terminalOutput, userInput]); // Scroll when output or input changes
+
   return (
     <BaseWindow
       title="Command Prompt"
@@ -569,6 +579,7 @@ File System State: ${JSON.stringify(fileSystem, null, 2)}`;
     >
       <div className="flex flex-col h-full">
         <div 
+          ref={terminalRef} // Add the ref here
           className="flex-1 p-1 bg-black text-white font-[Consolas,monaco] text-sm overflow-auto whitespace-pre-wrap"
           style={{
             fontFamily: "'Lucida Console', Monaco, monospace",
