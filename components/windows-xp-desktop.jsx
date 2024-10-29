@@ -13,6 +13,7 @@ import { SkillsWindow } from './skills-window'
 import { ContactWindow } from './contact-window'
 import { ResumeWindow } from './resume-window'
 import { TerminalWindow } from './terminal-window'
+import { WebViewWindow } from './web-view-window'
 
 export function WindowsXpDesktop() {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
@@ -31,10 +32,39 @@ export function WindowsXpDesktop() {
   })
   const [iconView, setIconView] = useState('medium'); // 'large', 'medium', 'small', 'list'
   const [iconSort, setIconSort] = useState('name'); // 'name', 'type', 'date'
+  const [webViews, setWebViews] = useState([]);
+
+  // Move getNextZIndex before useEffect and memoize it
+  const getNextZIndex = useCallback(() => {
+    // Get the highest z-index from both windows and webViews
+    const highestWindowZIndex = Math.max(0, ...windows.map(w => w.zIndex));
+    const highestWebViewZIndex = Math.max(0, ...webViews.map(w => w.zIndex));
+    const currentHighest = Math.max(highestWindowZIndex, highestWebViewZIndex, nextZIndex);
+    return currentHighest + 1;
+  }, [windows, webViews, nextZIndex]);
 
   useEffect(() => {
     setIsClient(true)
   }, [])
+
+  useEffect(() => {
+    const handleOpenWebView = (event) => {
+      const { url, title } = event.detail;
+      const newWebView = {
+        id: `webview-${Date.now()}`,
+        url,
+        title,
+        type: 'webview',
+        isMinimized: false,
+        isMaximized: false,
+        zIndex: getNextZIndex()
+      };
+      setWebViews(prev => [...prev, newWebView]);
+    };
+
+    window.addEventListener('openWebView', handleOpenWebView);
+    return () => window.removeEventListener('openWebView', handleOpenWebView);
+  }, [getNextZIndex]); // Only depend on getNextZIndex
 
   const handleStartupComplete = () => {
     setIsStarting(false)
@@ -200,6 +230,22 @@ export function WindowsXpDesktop() {
     list: 'text-sm ml-2',
   };
 
+  const closeWebView = (id) => {
+    setWebViews(prev => prev.filter(view => view.id !== id));
+  };
+
+  const minimizeWebView = (id) => {
+    setWebViews(prev => prev.map(view => 
+      view.id === id ? { ...view, isMinimized: !view.isMinimized } : view
+    ));
+  };
+
+  const maximizeWebView = (id) => {
+    setWebViews(prev => prev.map(view => 
+      view.id === id ? { ...view, isMaximized: !view.isMaximized } : view
+    ));
+  };
+
   if (!isClient) {
     return null
   }
@@ -255,8 +301,25 @@ export function WindowsXpDesktop() {
         )}
         <Taskbar 
           toggleStartMenu={toggleStartMenu} 
-          windows={windows}
-          focusWindow={focusWindow}
+          windows={[
+            ...windows,
+            ...webViews.map(view => ({
+              name: view.title,
+              isMinimized: view.isMinimized,
+              icon: '🌐'
+            }))
+          ]}
+          focusWindow={(name) => {
+            // Handle focusing both regular windows and web views
+            const webView = webViews.find(v => v.title === name);
+            if (webView) {
+              setWebViews(prev => prev.map(v => 
+                v.id === webView.id ? { ...v, isMinimized: false, zIndex: getNextZIndex() } : v
+              ));
+            } else {
+              focusWindow(name);
+            }
+          }}
         />
         {windows.map(window => (
           !window.isMinimized && (
@@ -264,6 +327,19 @@ export function WindowsXpDesktop() {
               {getWindowComponent(window)}
             </div>
           )
+        ))}
+        {/* Web View Windows */}
+        {webViews.map((webView) => (
+          <WebViewWindow
+            key={webView.id}
+            title={webView.title}
+            url={webView.url}
+            onClose={() => closeWebView(webView.id)}
+            onMinimize={() => minimizeWebView(webView.id)}
+            onMaximize={() => maximizeWebView(webView.id)}
+            isMaximized={webView.isMaximized}
+            zIndex={webView.zIndex}
+          />
         ))}
       </div>
     </>
