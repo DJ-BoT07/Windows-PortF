@@ -50,6 +50,11 @@ export function StartMenu({ closeStartMenu, addWindow }) {
     closeStartMenu();
   };
 
+  const openSpotifyPlaylist = () => {
+    window.open('https://open.spotify.com/playlist/2RTj7euo4HVrC64ftJz3Ec?si=976003e370044036', '_blank', 'noopener,noreferrer');
+    closeStartMenu();
+  };
+
   return (
     <motion.div 
       className="absolute left-0 bottom-0 w-80 bg-[#4282d6] border-2 border-[#3169c6] shadow-lg rounded-tr-lg overflow-hidden"
@@ -113,7 +118,12 @@ export function StartMenu({ closeStartMenu, addWindow }) {
           >
             <MenuItem icon="🖼️" name="My Pictures" />
           </button>
-          <MenuItem icon="🎵" name="My Music" />
+          <button
+            className="w-full text-left"
+            onClick={openSpotifyPlaylist}
+          >
+            <MenuItem icon="🎵" name="My Music" />
+          </button>
           <MenuItem 
             icon="📂" 
             name="All Programs" 
@@ -143,8 +153,25 @@ export function StartMenu({ closeStartMenu, addWindow }) {
         </div>
         <div className="w-32 bg-[#d3e5fa] p-2">
           <SmallMenuItem icon="📊" name="My Recent Documents" />
-          <SmallMenuItem icon="🖥️" name="My Pictures" />
-          <SmallMenuItem icon="🎵" name="My Music" />
+          <button
+            className="w-full text-left"
+            onClick={() => {
+              addWindow('My Pictures', '🖼️');
+              closeStartMenu();
+            }}
+          >
+            <SmallMenuItem icon="🖥️" name="My Pictures" />
+          </button>
+          <button
+            className="w-full text-left"
+            onClick={openSpotifyPlaylist}
+          >
+            <SmallMenuItem 
+              icon="🎵" 
+              name="My Music"
+              onClick={openSpotifyPlaylist}
+            />
+          </button>
           <SmallMenuItem icon="💻" name="My Computer" />
           <SmallMenuItem icon="🔧" name="Control Panel" />
         </div>
@@ -168,9 +195,12 @@ function MenuItem({ icon, name, highlight = false }) {
   )
 }
 
-function SmallMenuItem({ icon, name }) {
+function SmallMenuItem({ icon, name, onClick }) {
   return (
-    <div className="flex items-center p-1 hover:bg-[#5b9adb] hover:text-white cursor-pointer rounded">
+    <div 
+      className="flex items-center p-1 hover:bg-[#5b9adb] hover:text-white cursor-pointer rounded w-full"
+      onClick={onClick}
+    >
       <span className="text-xl mr-2">{icon}</span>
       <span className="text-xs">{name}</span>
     </div>
