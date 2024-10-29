@@ -104,8 +104,16 @@ export function StartMenu({ closeStartMenu, addWindow }) {
           >
             <MenuItem icon="📁" name="My Documents" />
           </button>
+          <button
+            className="w-full text-left"
+            onClick={() => {
+              addWindow('My Pictures', '🖼️');
+              closeStartMenu();
+            }}
+          >
+            <MenuItem icon="🖼️" name="My Pictures" />
+          </button>
           <MenuItem icon="🎵" name="My Music" />
-          <MenuItem icon="🖼️" name="My Pictures" />
           <MenuItem 
             icon="📂" 
             name="All Programs" 

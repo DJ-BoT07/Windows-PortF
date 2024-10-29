@@ -14,6 +14,7 @@ import { ContactWindow } from './contact-window'
 import { ResumeWindow } from './resume-window'
 import { TerminalWindow } from './terminal-window'
 import { WebViewWindow } from './web-view-window'
+import { PicturesWindow } from './pictures-window'
 
 export function WindowsXpDesktop() {
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false)
@@ -179,6 +180,14 @@ export function WindowsXpDesktop() {
           isMaximized={window.isMaximized}
           zIndex={window.zIndex}
           addWindow={addWindow}
+        />;
+      case 'My Pictures':
+        return <PicturesWindow 
+          onClose={() => removeWindow(window.name)}
+          onMinimize={() => toggleMinimize(window.name)}
+          onMaximize={() => toggleMaximize(window.name)}
+          isMaximized={window.isMaximized}
+          zIndex={window.zIndex}
         />;
       default:
         return null;
