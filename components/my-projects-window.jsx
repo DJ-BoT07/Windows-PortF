@@ -43,7 +43,7 @@ export function MyProjectsWindow({ onClose, onMinimize, onMaximize, isMaximized,
     { name: "GDSC DYPCOE Website", readme: "Part of the team that developed the official website for GDSC DYPCOE using React.js and Tailwind CSS.", github: "https://dscdypcoe.web.app/" },
     { name: "Electricity Load Forecasting", readme: `Developed a machine learning model for the Delhi Electricity Board to predict electricity load consumption using historical data, achieving 85% accuracy in forecasting.
       - Implemented data preprocessing and feature engineering techniques to handle time-series data
-      - Created visualizations and reports to help stakeholders understand consumption patterns and make informed decisions`, github: "https://sih-proto.vercel.app/" },
+      - Created visualizations and reports to help stakeholders understand consumption patterns and make informed decisions`, github: "https://sihv2.vercel.app/" },
     { name: "AI Playground", readme: "Created an interactive space where you can meet WebGPT and DALLE clones using React.js, OpenAI, and Tailwind CSS.", github: "https://github.com/DJ-BoT07/DjAI-TOOLS" },
     { name: "CryptoVerse", readme: "Developed a cryptocurrency app that provides daily insights using charts and live data with React.js and CoinGecko API.", github: "https://github.com/DJ-BoT07/CryptoMon2" },
     { name: "Meta Verse", readme: "An immersive MetaVerse project where you can interact with DigiMons using React Three Fiber and Three.js.", github: "https://github.com/DJ-BoT07/Portals" },
