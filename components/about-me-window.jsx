@@ -224,6 +224,7 @@ function EducationInfo() {
 
 function AchievementsSection() {
   const achievements = [
+    "Smart India Hackathon Finalist 2024 Top 5 India",
     "Winner of Website Building Competition by GDSC DYPCOE",
     "Winner of Avishkar Competition (SPPU) for Mental Health Assessment",
     "Featured in College Newsletter multiple times",
