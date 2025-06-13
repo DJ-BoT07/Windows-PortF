@@ -35,7 +35,7 @@ export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                3rd Year Computer Engineering Student
+                4th Year Computer Engineering Student
               </motion.p>
               <motion.p 
                 className="text-[#1B57AA]"
@@ -225,6 +225,8 @@ function EducationInfo() {
 function AchievementsSection() {
   const achievements = [
     "Smart India Hackathon Finalist 2024 Top 5 India",
+    "Global Rank 389 Leetcode Weekly Contest 444",
+    "Best Paper Award at International Conference on Cybertech and Smart Systems 2025",
     "Winner of Website Building Competition by GDSC DYPCOE",
     "Winner of Avishkar Competition (SPPU) for Mental Health Assessment",
     "Featured in College Newsletter multiple times",
@@ -354,7 +356,7 @@ function TechnicalSkillsSection() {
         <div className="space-y-2">
           <div className="flex items-center text-sm">
             <Star className="w-4 h-4 text-yellow-500 mr-2" />
-            <span>LeetCode: 200+ Problems Solved</span>
+            <span>LeetCode: 375+ Problems Solved</span>
           </div>
           <div className="flex items-center text-sm">
             <Star className="w-4 h-4 text-yellow-500 mr-2" />
