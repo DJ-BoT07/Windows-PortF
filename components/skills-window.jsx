@@ -9,32 +9,38 @@ export function SkillsWindow({ onClose, onMinimize, onMaximize, isMaximized, zIn
 
   const skills = {
     'Languages': [
+      { name: 'Java', level: 90, icon: <Code size={16} /> },
       { name: 'C++', level: 90, icon: <Code size={16} /> },
-      { name: 'Java', level: 85, icon: <Code size={16} /> },
       { name: 'Python', level: 80, icon: <Code size={16} /> },
+      { name: 'TypeScript', level: 85, icon: <Code size={16} /> },
     ],
-    'Technologies and Frameworks': [
-      { name: 'HTML/CSS', level: 90, icon: <Layout size={16} /> },
-      { name: 'Tailwind', level: 85, icon: <Layout size={16} /> },
-      { name: 'ReactJS', level: 90, icon: <Layout size={16} /> },
-      { name: 'NextJS', level: 85, icon: <Layout size={16} /> },
-      { name: 'NodeJS', level: 80, icon: <Database size={16} /> },
-      { name: 'ExpressJS', level: 75, icon: <Database size={16} /> },
+    'Technologies & Frameworks': [
+      { name: 'HTML/CSS', level: 95, icon: <Layout size={16} /> },
+      { name: 'Tailwind CSS', level: 90, icon: <Layout size={16} /> },
+      { name: 'ReactJS', level: 92, icon: <Layout size={16} /> },
+      { name: 'NextJS', level: 88, icon: <Layout size={16} /> },
+      { name: 'Redux', level: 80, icon: <Layout size={16} /> },
+      { name: 'NodeJS', level: 82, icon: <Database size={16} /> },
+      { name: 'ExpressJS', level: 78, icon: <Database size={16} /> },
+    ],
+    'Databases & DevOps': [
+      { name: 'MongoDB', level: 82, icon: <Database size={16} /> },
       { name: 'Firebase', level: 90, icon: <Database size={16} /> },
-      { name: 'MongoDB', level: 80, icon: <Database size={16} /> },
+      { name: 'MySQL', level: 78, icon: <Database size={16} /> },
+      { name: 'Docker', level: 72, icon: <Terminal size={16} /> },
     ],
     'AI & ML Tools': [
-      { name: 'Gemini', level: 85, icon: <Brain size={16} /> },
+      { name: 'Google Gen AI', level: 88, icon: <Brain size={16} /> },
       { name: 'Hugging Face', level: 80, icon: <Brain size={16} /> },
     ],
     'Deployment & Version Control': [
-      { name: 'Git', level: 90, icon: <GitBranch size={16} /> },
-      { name: 'Netlify', level: 85, icon: <Terminal size={16} /> },
-      { name: 'Vercel', level: 85, icon: <Terminal size={16} /> },
+      { name: 'Git', level: 92, icon: <GitBranch size={16} /> },
+      { name: 'Netlify', level: 88, icon: <Terminal size={16} /> },
+      { name: 'Vercel', level: 88, icon: <Terminal size={16} /> },
     ],
     'Competitive Programming': [
-      { name: 'HackerRank', level: 85, icon: <Code size={16} /> },
-      { name: 'LeetCode (200+ Problems)', level: 90, icon: <Code size={16} /> },
+      { name: 'HackerRank (5★)', level: 88, icon: <Code size={16} /> },
+      { name: 'LeetCode 375+ · Rating 1756', level: 92, icon: <Code size={16} /> },
     ]
   };
 
@@ -116,7 +122,7 @@ export function SkillsWindow({ onClose, onMinimize, onMaximize, isMaximized, zIn
               <div className="text-xs space-y-1">
                 <p>Total Skills: {Object.values(skills).flat().length}</p>
                 <p>Categories: {Object.keys(skills).length}</p>
-                <p>Last Updated: 2024</p>
+                <p>Last Updated: 2025</p>
               </div>
             </div>
           </div>

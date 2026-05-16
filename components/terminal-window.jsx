@@ -362,20 +362,24 @@ ${contents.map(name =>
     },
 
     systeminfo: () => `
-Host Name:                 WINDOWS-XP
+Host Name:                 DIGVIJAY-PC
 OS Name:                   Microsoft Windows XP Professional
 OS Version:               5.1.2600
 OS Manufacturer:          Microsoft Corporation
-System Manufacturer:      PC Manufacturer
-System Type:              X86-based PC
-Processor:                x86 Family 6 Model 42 Stepping 7 GenuineIntel ~2800 Mhz
-BIOS Version:             AMI V1.23
+Owner:                    Digvijay Mangaonkar (DJ-BoT07)
+Role:                     SDE Intern @ Zomato | Final Year B.E. Student
+College:                  D.Y. Patil College of Engineering, Akurdi, Pune
+CGPA:                     9.48
+LeetCode Rating:          1756 | 375+ Problems | Global Rank 389
+System Type:              Full-Stack Developer | React / Next.js Specialist
+Processor:                Brain v4.0 ~Caffeinated GHz
+Specialization:           Frontend Engineering, UI Component Libraries
 Windows Directory:        C:\\WINDOWS
 System Directory:         C:\\WINDOWS\\System32
 Boot Device:              \\Device\\HarddiskVolume1
-System Locale:            en-us
-Input Locale:             en-us
-Time Zone:                (GMT-08:00) Pacific Time (US & Canada)`,
+System Locale:            en-in
+Input Locale:             en-in
+Time Zone:                (GMT+05:30) India Standard Time`,
 
     tasklist: () => `
 Image Name                   PID    Session Name    Mem Usage

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BaseWindow } from './base-window';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Mail, Phone, Github, Globe, Trophy, Book, Star, Briefcase, Code, ChevronRight, FileText, Folder, ExternalLink } from 'lucide-react';
+import { User, Mail, Phone, Github, Globe, Trophy, Book, Star, Briefcase, Code, ChevronRight, FileText, Folder, ExternalLink, Building2, Zap } from 'lucide-react';
 
 export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zIndex }) {
   const [activeTab, setActiveTab] = useState('profile');
@@ -35,7 +35,7 @@ export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                4th Year Computer Engineering Student
+                Final Year Computer Engineering Student
               </motion.p>
               <motion.p 
                 className="text-[#1B57AA]"
@@ -54,6 +54,11 @@ export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
           </div>
         </div>
       )
+    },
+    experience: {
+      icon: <Building2 size={16} />,
+      title: 'Experience',
+      content: <ExperienceSection />
     },
     achievements: {
       icon: <Trophy size={16} />,
@@ -205,7 +210,7 @@ function EducationInfo() {
         <div>
           <p className="font-medium">D.Y. Patil College of Engineering</p>
           <p className="text-gray-600">Bachelor of Engineering</p>
-          <p className="text-[#1B57AA]">SGPA: 9.50</p>
+          <p className="text-[#1B57AA]">CGPA: 9.48</p>
         </div>
         <div>
           <p className="font-medium">New English School Patpanhale</p>
@@ -222,16 +227,93 @@ function EducationInfo() {
   );
 }
 
+function ExperienceSection() {
+  const experiences = [
+    {
+      role: "SDE Intern — Frontend",
+      company: "Zomato",
+      team: "One-Support Nugget",
+      period: "June 2024 – April 2025",
+      highlight: true,
+      color: "#E23744",
+      points: [
+        "Contributed to One-Support UI Components Library, Chat SDK (backbone of the chat system), and Zomato Lifeline — used by Customer Delight Associates to interact with real-time agents.",
+        "Developed key functionalities: Block/Unblock, Shift Reports & CSV Exports, Query Management Enhancements, and Ticketing System Improvements (event payload updates, glitch fixes, assignment optimizations).",
+        "Introduced new UI components like WarningModalV2, added tooltips, refined bulk operations, and built the Call Support Module with Firefly-based summary, integrated modals, and call logs."
+      ]
+    },
+    {
+      role: "Full Stack Web Developer Intern",
+      company: "Simplium Technologies",
+      team: "",
+      period: "December 2023 – April 2024",
+      highlight: false,
+      color: "#1B57AA",
+      points: [
+        "Worked on Bird Earner (freelancing platform): built Admin Dashboard and Frontend using Next.js, Tailwind CSS, Appwrite, and MySQL — delivering responsive, cross-browser compatible UIs to manage users and activities.",
+        "Worked on City News Chandigarh: a dynamic news website built with Next.js and Tailwind CSS, featuring real-time updates, category-wise filtering, Selenium-based web scraping, and ethical user-centric features."
+      ]
+    }
+  ];
+
+  return (
+    <div className="space-y-4">
+      <h3 className="text-[#1B57AA] font-bold flex items-center">
+        <Building2 size={16} className="mr-2" />
+        Work Experience
+      </h3>
+      {experiences.map((exp, index) => (
+        <motion.div
+          key={index}
+          className={`rounded border-2 overflow-hidden ${
+            exp.highlight
+              ? 'border-[#E23744] shadow-md'
+              : 'border-[#D4D0C8]'
+          }`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.15 }}
+        >
+          {/* Header */}
+          <div
+            className="px-4 py-3 flex items-center justify-between"
+            style={{ backgroundColor: exp.highlight ? '#E23744' : '#1B57AA' }}
+          >
+            <div>
+              <div className="text-white font-bold text-sm">{exp.role}</div>
+              <div className="text-white/80 text-xs">
+                {exp.company}{exp.team ? ` · ${exp.team}` : ''}
+              </div>
+            </div>
+            <div className="text-white/70 text-xs whitespace-nowrap">{exp.period}</div>
+          </div>
+          {/* Body */}
+          <div className="bg-white p-4">
+            <ul className="space-y-2">
+              {exp.points.map((point, i) => (
+                <li key={i} className="flex items-start text-sm">
+                  <Zap size={13} className="mr-2 mt-0.5 flex-shrink-0" style={{ color: exp.color }} />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 function AchievementsSection() {
   const achievements = [
-    "Smart India Hackathon Finalist 2024 Top 5 India",
-    "Global Rank 389 Leetcode Weekly Contest 444",
-    "Best Paper Award at International Conference on Cybertech and Smart Systems 2025",
-    "Winner of Website Building Competition by GDSC DYPCOE",
-    "Winner of Avishkar Competition (SPPU) for Mental Health Assessment",
-    "Featured in College Newsletter multiple times",
-    "Generative AI Workshop Certification",
-    "Google Cloud Skill Boost Certification"
+    { text: "Smart India Hackathon 2024 Finalist — Runner Up, Top 5 India", icon: "🏆" },
+    { text: "Global Rank 389 — LeetCode Weekly Contest 444", icon: "⚡" },
+    { text: "Best Paper Award — International Conference on Cybertech and Smart Systems 2025", icon: "📄" },
+    { text: "Winner — GDSC DYPCOE 2023 Website Building Competition", icon: "🥇" },
+    { text: "Winner — Avishkar Competition, SPPU (Consecutively 3 Years)", icon: "🎯" },
+    { text: "Featured in College Newsletter multiple times", icon: "📰" },
+    { text: "Generative AI Workshop Certification", icon: "🤖" },
+    { text: "Google Cloud Skill Boost Certification", icon: "☁️" }
   ];
 
   return (
@@ -247,10 +329,10 @@ function AchievementsSection() {
             className="bg-[#F5F5F5] border border-[#D4D0C8] rounded p-3 flex items-center"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
+            transition={{ delay: index * 0.08 }}
           >
-            <Star size={16} className="mr-3 text-[#1B57AA]" />
-            <span className="text-sm">{achievement}</span>
+            <span className="text-lg mr-3">{achievement.icon}</span>
+            <span className="text-sm">{achievement.text}</span>
           </motion.div>
         ))}
       </div>
@@ -293,19 +375,19 @@ function PositionsSection() {
 function TechnicalSkillsSection() {
   const technicalSkills = {
     'Programming Languages': [
-      'C++', 'Java', 'Python', 'JavaScript'
+      'Java', 'C++', 'Python', 'JavaScript', 'TypeScript'
     ],
     'Web Technologies': [
-      'HTML5', 'CSS3', 'Tailwind CSS', 'React.js', 'Next.js'
+      'HTML5', 'CSS3', 'Tailwind CSS', 'ReactJS', 'NextJS', 'Redux'
     ],
     'Backend & Databases': [
-      'Node.js', 'Express.js', 'MongoDB', 'Firebase'
+      'Node.js', 'Express.js', 'MongoDB', 'Firebase', 'MySQL', 'Docker'
     ],
     'Tools & Platforms': [
-      'Git', 'GitHub', 'VS Code', 'Netlify', 'Vercel'
+      'Git', 'GitHub', 'Netlify', 'Vercel', 'React Jest'
     ],
     'AI & ML': [
-      'Gemini', 'Hugging Face', 'TensorFlow'
+      'Gemini', 'Hugging Face', 'Google Generative AI'
     ]
   };
 
@@ -356,7 +438,7 @@ function TechnicalSkillsSection() {
         <div className="space-y-2">
           <div className="flex items-center text-sm">
             <Star className="w-4 h-4 text-yellow-500 mr-2" />
-            <span>LeetCode: 375+ Problems Solved</span>
+            <span>LeetCode: 375+ Problems · Rating 1756 · Global Rank 389 (Contest 444)</span>
           </div>
           <div className="flex items-center text-sm">
             <Star className="w-4 h-4 text-yellow-500 mr-2" />

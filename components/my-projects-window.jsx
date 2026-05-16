@@ -12,52 +12,104 @@ export function MyProjectsWindow({ onClose, onMinimize, onMaximize, isMaximized,
 
   const projects = [
     { 
-      name: "Ivene 1.0", 
-      readme: `Tech Stack: Next.js, Google Generative AI, Clerk, React Speech Hook, Drizzle ORM
-      - Engineered a scalable mock interview platform utilizing Next.js and Google Generative AI, implementing real-time speech-to-text capabilities with React-Speech-Recognition, achieving a 40% increase in user performance metrics.
-      - Integrated webcam functionality for immersive interview simulations and utilized Drizzle ORM with PostgreSQL to manage over 10,000 records, enhancing data retrieval speed.`,
+      name: "HealthSetu", 
+      badge: "Featured",
+      readme: `AI-Powered Integrated Healthcare Management System
+Tech Stack: ReactJS, Tailwind CSS, DaisyUI, NodeJS, MongoDB, JWT, Python
+
+- Built an AI-powered healthcare platform with role-based dashboards (patient, doctor, admin), intelligent queueing, and inventory management to optimize hospital operations.
+- Integrated appointment booking, real-time health tracking (Fitbit), automated prescriptions, and medication reminders to improve patient care.`,
+      github: "https://github.com/DJ-BoT07/HealthSetu",
+      demoUrl: "",
+    },
+    { 
+      name: "Ivene 1.0 ©", 
+      badge: "Copyright Filed",
+      readme: `AI-Powered Mock Interview Platform — Copyright Filed
+Tech Stack: Next.js, Google Generative AI, Clerk, React Speech Hook, Drizzle ORM
+
+- Built an AI Powered Mock Interview Platform with Next.js and Google Generative AI, using real-time speech-to-text and webcam support to improve user performance.
+- Optimized Drizzle ORM + PostgreSQL to handle 10K+ records efficiently.`,
       github: "https://github.com/DJ-BoT07/Ivene",
       demoUrl: "https://i-vene-1-0.vercel.app/",
       preview: "https://i-vene-1-0.vercel.app/",
-      
       requiresAuth: true
     },
     { 
       name: "Notation", 
-      readme: `Tech Stack: Next.js, Liveblock, Google Generative AI, Clerk, Firebase, Cloudflare
-      - Architected a real-time document collaboration platform using Next.js and Gemini AI, optimizing with Cloudflare for security and increasing user engagement by 30%. Leveraged Firebase for scalable data storage.
-      - Designed a Notion-style interface for enhanced document creation and editing, integrating Google Generative AI for real-time translation, achieving 90% accuracy for multilingual collaboration.`,
-     
-      readme: `Tech Stack: Next.js, Liveblock, Google Generative AI, Clerk...`,
+      readme: `Real-time Document Collaboration Platform
+Tech Stack: Next.js, Liveblocks, Google Generative AI, Clerk, Firebase, Cloudflare
+
+- Architected a real-time document collaboration platform using Next.js and Gemini AI, optimizing with Cloudflare for security and increasing user engagement by 30%.
+- Designed a Notion-style interface, integrating Google Generative AI for real-time translation with 90% accuracy for multilingual collaboration.`,
       github: "https://github.com/DJ-BoT07/Notation",
       demoUrl: "https://notation-seven.vercel.app/",
       preview: "https://notation-seven.vercel.app/",
       requiresAuth: true
     },
     { 
+      name: "Bird Earner",
+      badge: "Simplium Internship",
+      readme: `Freelancing Platform — Built during Simplium Technologies Internship
+Tech Stack: Next.js, Tailwind CSS, Appwrite, MySQL
+
+- Built the Admin Dashboard and Frontend delivering responsive, cross-browser compatible UIs to manage users and activities.
+- Implemented full CRUD operations for user management, activity tracking, and platform administration.`,
+      github: "https://github.com/DJ-BoT07/"
+    },
+    { 
+      name: "City News Chandigarh",
+      badge: "Simplium Internship",
+      readme: `Dynamic News Website — Built during Simplium Technologies Internship
+Tech Stack: Next.js, Tailwind CSS, Selenium
+
+- Built a dynamic news website featuring real-time updates, category-wise filtering, and Selenium-based web scraping.
+- Collaborated with designers to build ethical and user-centric features.`,
+      github: "https://github.com/DJ-BoT07/"
+    },
+    { 
       name: "Old Portfolio", 
-      readme: `Developed a personal portfolio website to showcase projects and skills.
-      - Tech Stack: HTML, CSS, JavaScript, React.js`,
+      readme: `Personal Portfolio Website
+Tech Stack: HTML, CSS, JavaScript, React.js
+
+- Developed a personal portfolio website to showcase projects and skills.`,
       github: "https://djport07.netlify.app/" 
     },
-    { name: "GDSC DYPCOE Website", readme: "Part of the team that developed the official website for GDSC DYPCOE using React.js and Tailwind CSS.", github: "https://dscdypcoe.web.app/" },
-    { name: "Electricity Load Forecasting", readme: `Developed a machine learning model for the Delhi Electricity Board to predict electricity load consumption using historical data, achieving 85% accuracy in forecasting.
-      - Implemented data preprocessing and feature engineering techniques to handle time-series data
-      - Created visualizations and reports to help stakeholders understand consumption patterns and make informed decisions`, github: "https://sihv2.vercel.app/" },
-    { name: "AI Playground", readme: "Created an interactive space where you can meet WebGPT and DALLE clones using React.js, OpenAI, and Tailwind CSS.", github: "https://github.com/DJ-BoT07/DjAI-TOOLS" },
-    { name: "CryptoVerse", readme: "Developed a cryptocurrency app that provides daily insights using charts and live data with React.js and CoinGecko API.", github: "https://github.com/DJ-BoT07/CryptoMon2" },
-    { name: "Meta Verse", readme: "An immersive MetaVerse project where you can interact with DigiMons using React Three Fiber and Three.js.", github: "https://github.com/DJ-BoT07/Portals" },
-    { name: "CodeX – Mental Health Assessment", readme: "Worked as a Frontend Developer for a virtual 3D model communication project using ReactJS, React Three Fiber, and Tailwind CSS.", github: "https://github.com/DJ-BoT07/"},
+    { name: "GDSC DYPCOE Website", readme: `Official Website for GDSC DYPCOE
+Tech Stack: React.js, Tailwind CSS
+
+- Part of the core team that developed the official website for GDSC DYPCOE.`, github: "https://dscdypcoe.web.app/" },
+    { name: "Electricity Load Forecasting", readme: `ML Model for Delhi Electricity Board
+Tech Stack: Python, Machine Learning
+
+- Developed a machine learning model to predict electricity load consumption using historical data, achieving 85% accuracy.
+- Implemented data preprocessing, feature engineering for time-series data, and stakeholder visualizations.`, github: "https://sihv2.vercel.app/" },
+    { name: "AI Playground", readme: `Interactive AI Tools Platform
+Tech Stack: React.js, OpenAI, Tailwind CSS
+
+- Created an interactive space featuring WebGPT and DALLE clones.`, github: "https://github.com/DJ-BoT07/DjAI-TOOLS" },
+    { name: "CryptoVerse", readme: `Cryptocurrency Insights App
+Tech Stack: React.js, CoinGecko API
+
+- Developed a cryptocurrency app providing daily insights using charts and live data.`, github: "https://github.com/DJ-BoT07/CryptoMon2" },
+    { name: "Meta Verse", readme: `Immersive 3D MetaVerse Experience
+Tech Stack: React Three Fiber, Three.js
+
+- An immersive MetaVerse project where you can interact with DigiMons.`, github: "https://github.com/DJ-BoT07/Portals" },
+    { name: "CodeX – Mental Health Assessment", readme: `Virtual 3D Model Communication Platform
+Tech Stack: ReactJS, React Three Fiber, Tailwind CSS
+
+- Worked as a Frontend Developer for a virtual 3D model communication project.`, github: "https://github.com/DJ-BoT07/"},
     { 
       name: "ACES DYPCOE Website", 
-      readme: `Part of the team for the official website of ACES DYPCOE.
-      - Tech Stack: React JS, Tailwind CSS, React Three Fiber, Node.js`,
+      readme: `Official Website of ACES DYPCOE
+Tech Stack: React JS, Tailwind CSS, React Three Fiber, Node.js`,
       github: "https://aces-dypcoe.vercel.app/" 
     },
     { 
       name: "TechFest DYPCOE Website", 
-      readme: `Part of the team for the official website for Advait 2k24, one of the biggest Tech-Fests in Pune by DYPCOE.
-      - Tech Stack: React JS, Tailwind CSS, React Three Fiber, Node.js, Supabase.js`,
+      readme: `Official Website for Advait 2k24 — Biggest Tech-Fest in Pune by DYPCOE
+Tech Stack: React JS, Tailwind CSS, React Three Fiber, Node.js, Supabase.js`,
       github: "https://dypcoe-techfest.vercel.app/" 
     }
     
@@ -216,7 +268,8 @@ function ProjectList({ projects, viewMode, onSelect }) {
         {projects.map((project, index) => (
           <div key={index}>
             <ProjectFolder 
-              name={project.name} 
+              name={project.name}
+              badge={project.badge}
               onClick={() => onSelect(project)} 
             />
           </div>
@@ -269,7 +322,12 @@ function ProjectList({ projects, viewMode, onSelect }) {
   }
 }
 
-function ProjectFolder({ name, onClick }) {
+function ProjectFolder({ name, badge, onClick }) {
+  const badgeColors = {
+    'Featured': 'bg-green-100 text-green-700',
+    'Copyright Filed': 'bg-purple-100 text-purple-700',
+    'Simplium Internship': 'bg-blue-100 text-blue-700',
+  };
   return (
     <div 
       className="flex flex-col items-center text-center cursor-pointer hover:bg-[#316AC5] hover:text-white p-2 rounded"
@@ -277,6 +335,11 @@ function ProjectFolder({ name, onClick }) {
     >
       <Folder size={32} className="mb-1 text-[#FCD364]" />
       <span className="text-xs">{name}</span>
+      {badge && (
+        <span className={`text-[9px] px-1.5 py-0.5 rounded-full mt-1 font-semibold ${badgeColors[badge] || 'bg-gray-100 text-gray-600'}`}>
+          {badge}
+        </span>
+      )}
     </div>
   );
 }
@@ -363,14 +426,22 @@ function ProjectDetails({ project, onBack }) {
           <ChevronLeft size={16} className="mr-1" />
           Back to projects
         </motion.button>
-        <motion.h2 
-          className="text-xl font-bold mb-4"
+        <motion.div
+          className="flex items-center gap-3 mb-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          {project.name}
-        </motion.h2>
+          <h2 className="text-xl font-bold">{project.name}</h2>
+          {project.badge && (
+            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+              project.badge === 'Featured' ? 'bg-green-100 text-green-700' :
+              project.badge === 'Copyright Filed' ? 'bg-purple-100 text-purple-700' :
+              project.badge === 'Simplium Internship' ? 'bg-blue-100 text-blue-700' :
+              'bg-gray-100 text-gray-600'
+            }`}>{project.badge}</span>
+          )}
+        </motion.div>
         <motion.div 
           className="bg-gray-100 p-4 rounded mb-4 flex-1 overflow-auto"
           initial={{ opacity: 0, y: 20 }}
