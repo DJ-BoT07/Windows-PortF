@@ -1,20 +1,43 @@
-import React, { useState } from 'react';
-import { BaseWindow } from './base-window';
-import { motion, AnimatePresence } from 'framer-motion';
-import { User, Mail, Phone, Github, Globe, Trophy, Book, Star, Briefcase, Code, ChevronRight, FileText, Folder, ExternalLink, Building2, Zap } from 'lucide-react';
+import React, { useState } from "react";
+import { BaseWindow } from "./base-window";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  User,
+  Mail,
+  Phone,
+  Github,
+  Globe,
+  Trophy,
+  Book,
+  Star,
+  Briefcase,
+  Code,
+  ChevronRight,
+  FileText,
+  Folder,
+  ExternalLink,
+  Building2,
+  Zap,
+} from "lucide-react";
 
-export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zIndex }) {
-  const [activeTab, setActiveTab] = useState('profile');
+export function AboutMeWindow({
+  onClose,
+  onMinimize,
+  onMaximize,
+  isMaximized,
+  zIndex,
+}) {
+  const [activeTab, setActiveTab] = useState("profile");
   const [hoveredLink, setHoveredLink] = useState(null);
 
   const tabs = {
     profile: {
       icon: <User size={16} />,
-      title: 'Profile',
+      title: "Profile",
       content: (
         <div className="space-y-4">
           <div className="flex items-center space-x-4 bg-gradient-to-r from-[#E3EFFD] to-[#F4F9FE] p-6 rounded-lg border border-[#B6D5F3]">
-            <motion.div 
+            <motion.div
               className="w-24 h-24 bg-gradient-to-br from-[#2E81EF] to-[#1B57AA] rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -22,14 +45,14 @@ export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
               D
             </motion.div>
             <div>
-              <motion.h2 
+              <motion.h2
                 className="text-xl font-bold text-[#1B57AA]"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
               >
                 Digvijay Mangaonkar
               </motion.h2>
-              <motion.p 
+              <motion.p
                 className="text-gray-600"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -37,7 +60,7 @@ export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
               >
                 Final Year Computer Engineering Student
               </motion.p>
-              <motion.p 
+              <motion.p
                 className="text-[#1B57AA]"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -47,34 +70,34 @@ export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
               </motion.p>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <ContactInfo setHoveredLink={setHoveredLink} />
             <EducationInfo />
           </div>
         </div>
-      )
+      ),
     },
     experience: {
       icon: <Building2 size={16} />,
-      title: 'Experience',
-      content: <ExperienceSection />
+      title: "Experience",
+      content: <ExperienceSection />,
     },
     achievements: {
       icon: <Trophy size={16} />,
-      title: 'Achievements',
-      content: <AchievementsSection />
+      title: "Achievements",
+      content: <AchievementsSection />,
     },
     positions: {
       icon: <Briefcase size={16} />,
-      title: 'Positions',
-      content: <PositionsSection />
+      title: "Positions",
+      content: <PositionsSection />,
     },
     skills: {
       icon: <Code size={16} />,
-      title: 'Technical Skills',
-      content: <TechnicalSkillsSection />
-    }
+      title: "Technical Skills",
+      content: <TechnicalSkillsSection />,
+    },
   };
 
   return (
@@ -98,9 +121,9 @@ export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
               <motion.div
                 key={key}
                 className={`flex items-center px-3 py-2 cursor-pointer ${
-                  activeTab === key 
-                    ? 'bg-[#316AC5] text-white' 
-                    : 'hover:bg-[#E5F1FB] text-[#1B57AA]'
+                  activeTab === key
+                    ? "bg-[#316AC5] text-white"
+                    : "hover:bg-[#E5F1FB] text-[#1B57AA]"
                 }`}
                 onClick={() => setActiveTab(key)}
                 whileHover={{ x: activeTab === key ? 0 : 2 }}
@@ -118,8 +141,8 @@ export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
               Quick Links
             </div>
             <div className="bg-[#EBF3FE] border border-[#ACA899] border-t-0 p-2 space-y-2">
-              <motion.a 
-                href="https://github.com/DJ-BoT07" 
+              <motion.a
+                href="https://github.com/DJ-BoT07"
                 target="_blank"
                 className="flex items-center text-[#0645AD] hover:underline text-xs"
                 whileHover={{ x: 2 }}
@@ -128,8 +151,8 @@ export function AboutMeWindow({ onClose, onMinimize, onMaximize, isMaximized, zI
                 GitHub Profile
                 <ExternalLink size={10} className="ml-1" />
               </motion.a>
-              <motion.a 
-                href="https://djport07.netlify.app/" 
+              <motion.a
+                href="https://djport07.netlify.app/"
                 target="_blank"
                 className="flex items-center text-[#0645AD] hover:underline text-xs"
                 whileHover={{ x: 2 }}
@@ -233,27 +256,28 @@ function ExperienceSection() {
       role: "SDE Intern — Frontend",
       company: "Zomato",
       team: "One-Support Nugget",
-      period: "June 2024 – April 2025",
+      period: "June 2025 – April 2026",
       highlight: true,
       color: "#E23744",
       points: [
-        "Contributed to One-Support UI Components Library, Chat SDK (backbone of the chat system), and Zomato Lifeline — used by Customer Delight Associates to interact with real-time agents.",
-        "Developed key functionalities: Block/Unblock, Shift Reports & CSV Exports, Query Management Enhancements, and Ticketing System Improvements (event payload updates, glitch fixes, assignment optimizations).",
-        "Introduced new UI components like WarningModalV2, added tooltips, refined bulk operations, and built the Call Support Module with Firefly-based summary, integrated modals, and call logs."
-      ]
+        "Migrated the frontend build system from CRACO to Rsbuild, reducing production build times by 80%(from 14 minutes to under 3 minutes), which significantly accelerated the CI/CD pipeline and enhanced overall developer productivity.",
+        "Contributed to the One-Support Eternal’s internal customer support platform by contributing to the UI Components Library, Chat SDK, and Zomato Lifeline, enabling Customer Delight Associates to efficiently manage large-scale real-time customer support.",
+        "Built and enhanced core ticketing workflows, call support module , query management, assignment optimization, event payload handling, and production fixes to improve platform reliability and support operations.",
+        "Engineered reusable frontend components for the shared UI component library, developing Modal Systems and reusable UI building blocks to enable scalable, consistent, and maintainable frontend development",
+      ],
     },
     {
       role: "Full Stack Web Developer Intern",
       company: "Simplium Technologies",
       team: "",
-      period: "December 2023 – April 2024",
+      period: "December 2024 – April 2025",
       highlight: false,
       color: "#1B57AA",
       points: [
-        "Worked on Bird Earner (freelancing platform): built Admin Dashboard and Frontend using Next.js, Tailwind CSS, Appwrite, and MySQL — delivering responsive, cross-browser compatible UIs to manage users and activities.",
-        "Worked on City News Chandigarh: a dynamic news website built with Next.js and Tailwind CSS, featuring real-time updates, category-wise filtering, Selenium-based web scraping, and ethical user-centric features."
-      ]
-    }
+        "Engineered the frontend of a freelancing marketplace, implementing reusable components, CRUD workflows, responsive interfaces, and seamless backend integrations with Appwrite.",
+        "Built a scalable news aggregation platform, implementing automated content ingestion, dynamic content delivery, category-based navigation, and SEO-optimized user experiences.",
+      ],
+    },
   ];
 
   return (
@@ -266,9 +290,7 @@ function ExperienceSection() {
         <motion.div
           key={index}
           className={`rounded border-2 overflow-hidden ${
-            exp.highlight
-              ? 'border-[#E23744] shadow-md'
-              : 'border-[#D4D0C8]'
+            exp.highlight ? "border-[#E23744] shadow-md" : "border-[#D4D0C8]"
           }`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -277,22 +299,29 @@ function ExperienceSection() {
           {/* Header */}
           <div
             className="px-4 py-3 flex items-center justify-between"
-            style={{ backgroundColor: exp.highlight ? '#E23744' : '#1B57AA' }}
+            style={{ backgroundColor: exp.highlight ? "#E23744" : "#1B57AA" }}
           >
             <div>
               <div className="text-white font-bold text-sm">{exp.role}</div>
               <div className="text-white/80 text-xs">
-                {exp.company}{exp.team ? ` · ${exp.team}` : ''}
+                {exp.company}
+                {exp.team ? ` · ${exp.team}` : ""}
               </div>
             </div>
-            <div className="text-white/70 text-xs whitespace-nowrap">{exp.period}</div>
+            <div className="text-white/70 text-xs whitespace-nowrap">
+              {exp.period}
+            </div>
           </div>
           {/* Body */}
           <div className="bg-white p-4">
             <ul className="space-y-2">
               {exp.points.map((point, i) => (
                 <li key={i} className="flex items-start text-sm">
-                  <Zap size={13} className="mr-2 mt-0.5 flex-shrink-0" style={{ color: exp.color }} />
+                  <Zap
+                    size={13}
+                    className="mr-2 mt-0.5 flex-shrink-0"
+                    style={{ color: exp.color }}
+                  />
                   <span>{point}</span>
                 </li>
               ))}
@@ -306,14 +335,26 @@ function ExperienceSection() {
 
 function AchievementsSection() {
   const achievements = [
-    { text: "Smart India Hackathon 2024 Finalist — Runner Up, Top 5 India", icon: "🏆" },
+    {
+      text: "Smart India Hackathon 2024 Finalist — Runner Up, Top 5 India",
+      icon: "🏆",
+    },
     { text: "Global Rank 389 — LeetCode Weekly Contest 444", icon: "⚡" },
-    { text: "Best Paper Award — International Conference on Cybertech and Smart Systems 2025", icon: "📄" },
-    { text: "Winner — GDSC DYPCOE 2023 Website Building Competition", icon: "🥇" },
-    { text: "Winner — Avishkar Competition, SPPU (Consecutively 3 Years)", icon: "🎯" },
+    {
+      text: "Best Paper Award — International Conference on Cybertech and Smart Systems 2025",
+      icon: "📄",
+    },
+    {
+      text: "Winner — GDSC DYPCOE 2023 Website Building Competition",
+      icon: "🥇",
+    },
+    {
+      text: "Winner — Avishkar Competition, SPPU (Consecutively 3 Years)",
+      icon: "🎯",
+    },
     { text: "Featured in College Newsletter multiple times", icon: "📰" },
     { text: "Generative AI Workshop Certification", icon: "🤖" },
-    { text: "Google Cloud Skill Boost Certification", icon: "☁️" }
+    { text: "Google Cloud Skill Boost Certification", icon: "☁️" },
   ];
 
   return (
@@ -345,7 +386,7 @@ function PositionsSection() {
     { title: "Web Lead", org: "GDGC DYPCOE" },
     { title: "Cloud Mentor", org: "GDGC DYPCOE" },
     { title: "ACES Tech Lead", org: "ACES DYPCOE" },
-    { title: "CPMC Gunner", org: "DYPCOE" }
+    { title: "CPMC Gunner", org: "DYPCOE" },
   ];
 
   return (
@@ -374,21 +415,31 @@ function PositionsSection() {
 
 function TechnicalSkillsSection() {
   const technicalSkills = {
-    'Programming Languages': [
-      'Java', 'C++', 'Python', 'JavaScript', 'TypeScript'
+    "Programming Languages": [
+      "Java",
+      "C++",
+      "Python",
+      "JavaScript",
+      "TypeScript",
     ],
-    'Web Technologies': [
-      'HTML5', 'CSS3', 'Tailwind CSS', 'ReactJS', 'NextJS', 'Redux'
+    "Web Technologies": [
+      "HTML5",
+      "CSS3",
+      "Tailwind CSS",
+      "ReactJS",
+      "NextJS",
+      "Redux",
     ],
-    'Backend & Databases': [
-      'Node.js', 'Express.js', 'MongoDB', 'Firebase', 'MySQL', 'Docker'
+    "Backend & Databases": [
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Firebase",
+      "MySQL",
+      "Docker",
     ],
-    'Tools & Platforms': [
-      'Git', 'GitHub', 'Netlify', 'Vercel', 'React Jest'
-    ],
-    'AI & ML': [
-      'Gemini', 'Hugging Face', 'Google Generative AI'
-    ]
+    "Tools & Platforms": ["Git", "GitHub", "Netlify", "Vercel", "React Jest"],
+    "AI & ML": ["Gemini", "Hugging Face", "Google Generative AI"],
   };
 
   return (
@@ -397,35 +448,37 @@ function TechnicalSkillsSection() {
         <Code size={16} className="mr-2" />
         Technical Expertise
       </h3>
-      
-      {Object.entries(technicalSkills).map(([category, skills], categoryIndex) => (
-        <motion.div
-          key={category}
-          className="bg-[#F5F5F5] border border-[#D4D0C8] rounded p-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: categoryIndex * 0.1 }}
-        >
-          <h4 className="text-[#1B57AA] font-medium mb-3">{category}</h4>
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill, index) => (
-              <motion.span
-                key={skill}
-                className="bg-[#E5F1FB] text-[#1B57AA] px-3 py-1 rounded-full text-sm border border-[#B6D5F3]"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: (categoryIndex * 0.1) + (index * 0.05) }}
-                whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: '#CCE1FF'
-                }}
-              >
-                {skill}
-              </motion.span>
-            ))}
-          </div>
-        </motion.div>
-      ))}
+
+      {Object.entries(technicalSkills).map(
+        ([category, skills], categoryIndex) => (
+          <motion.div
+            key={category}
+            className="bg-[#F5F5F5] border border-[#D4D0C8] rounded p-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: categoryIndex * 0.1 }}
+          >
+            <h4 className="text-[#1B57AA] font-medium mb-3">{category}</h4>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, index) => (
+                <motion.span
+                  key={skill}
+                  className="bg-[#E5F1FB] text-[#1B57AA] px-3 py-1 rounded-full text-sm border border-[#B6D5F3]"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: categoryIndex * 0.1 + index * 0.05 }}
+                  whileHover={{
+                    scale: 1.05,
+                    backgroundColor: "#CCE1FF",
+                  }}
+                >
+                  {skill}
+                </motion.span>
+              ))}
+            </div>
+          </motion.div>
+        ),
+      )}
 
       {/* Additional Info */}
       <motion.div
@@ -434,11 +487,16 @@ function TechnicalSkillsSection() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        <h4 className="text-[#1B57AA] font-medium mb-2">Competitive Programming</h4>
+        <h4 className="text-[#1B57AA] font-medium mb-2">
+          Competitive Programming
+        </h4>
         <div className="space-y-2">
           <div className="flex items-center text-sm">
             <Star className="w-4 h-4 text-yellow-500 mr-2" />
-            <span>LeetCode: 375+ Problems · Rating 1756 · Global Rank 389 (Contest 444)</span>
+            <span>
+              LeetCode: 375+ Problems · Rating 1756 · Global Rank 389 (Contest
+              444)
+            </span>
           </div>
           <div className="flex items-center text-sm">
             <Star className="w-4 h-4 text-yellow-500 mr-2" />
